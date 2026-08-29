@@ -1,14 +1,93 @@
 {
-  "id": "mbp-13-m1-2020", "family": "macbook-pro",
+  "id": "mbp-13-m1-2020",
+  "family": "macbook-pro",
   "displayName": "MacBook Pro 13 (M1, 2020)",
-  "releasedAt": "2020-11-17", "discontinuedAt": "2022-06-24",
-  "display": { "sizeInch": 13.3, "resolution": "2560x1600", "nits": 500, "proMotion": false },
-  "ports": { "thunderbolt": 2, "thunderboltVersion": 3, "headphone": true },
+  "releasedAt": "2020-11-17",
+  "discontinuedAt": "2022-06-24",
+  "display": {
+    "sizeInch": 13.3,
+    "resolution": "2560x1600",
+    "nits": 500,
+    "proMotion": false
+  },
+  "ports": {
+    "thunderbolt": 2,
+    "thunderboltVersion": 3,
+    "headphone": true
+  },
   "weightKg": 1.4,
   "configs": [
-    { "chipId": "m1-8c-8g", "memoryGb": 8, "storageGb": 256, "isBaseConfig": true,  "prices": [{ "krw": 1990000, "effectiveFrom": "2020-11-17" }] },
-    { "chipId": "m1-8c-8g", "memoryGb": 8, "storageGb": 512, "isBaseConfig": false, "prices": [{ "krw": 2290000, "effectiveFrom": "2020-11-17" }] }
+    {
+      "chipId": "m1-8c-8g",
+      "memoryGb": 8,
+      "storageGb": 256,
+      "isBaseConfig": true,
+      "prices": [
+        {
+          "krw": 1690000,
+          "effectiveFrom": "2020-11-17"
+        }
+      ]
+    },
+    {
+      "chipId": "m1-8c-8g",
+      "memoryGb": 8,
+      "storageGb": 512,
+      "isBaseConfig": false,
+      "prices": [
+        {
+          "krw": 1990000,
+          "effectiveFrom": "2020-11-17"
+        }
+      ]
+    }
   ],
-  "upgrades": [ {"kind":"memory","fromValue":8,"toValue":16,"krw":250000}, {"kind":"storage","fromValue":256,"toValue":512,"krw":250000},{"kind":"storage","fromValue":256,"toValue":1024,"krw":550000},{"kind":"storage","fromValue":256,"toValue":2048,"krw":1150000}, {"kind":"storage","fromValue":512,"toValue":1024,"krw":300000},{"kind":"storage","fromValue":512,"toValue":2048,"krw":900000},{"kind":"storage","fromValue":512,"toValue":4096,"krw":1800000} ],
-  "sourceUrl": "https://support.apple.com/kr-kr/111893", "checkedAt": "2026-08-29", "verified": false
+  "upgrades": [
+    {
+      "kind": "memory",
+      "fromValue": 8,
+      "toValue": 16,
+      "krw": 250000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 256,
+      "toValue": 512,
+      "krw": 250000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 256,
+      "toValue": 1024,
+      "krw": 550000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 256,
+      "toValue": 2048,
+      "krw": 1150000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 512,
+      "toValue": 1024,
+      "krw": 300000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 512,
+      "toValue": 2048,
+      "krw": 900000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 512,
+      "toValue": 4096,
+      "krw": 1800000
+    }
+  ],
+  "sourceUrl": "https://support.apple.com/kr-kr/111893",
+  "checkedAt": "2026-08-29",
+  "verified": true,
+  "verifiedSource": "press"
 }

@@ -35,6 +35,8 @@ function row(over: Partial<Row> & { id: string }): Row {
     isCurrent: true,
     displaySizeInch: 13.6,
     verified: false,
+    upgradesVerified: false,
+    upcoming: false,
     checkedAt: '2026-08-29',
     ...over,
   }

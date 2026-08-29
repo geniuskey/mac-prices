@@ -1,20 +1,126 @@
 {
-  "id": "mac-studio-m4-max-m3-ultra-2025", "family": "mac-studio",
+  "id": "mac-studio-m4-max-m3-ultra-2025",
+  "family": "mac-studio",
   "displayName": "Mac Studio (M4 Max/M3 Ultra, 2025)",
-  "releasedAt": "2025-03-12", "discontinuedAt": null, "display": null,
-  "ports": { "thunderbolt": 6, "thunderboltVersion": 5, "usbA": 2, "hdmi": 1, "sdCard": true, "ethernet": true, "headphone": true },
+  "releasedAt": "2025-03-12",
+  "discontinuedAt": null,
+  "display": null,
+  "ports": {
+    "thunderbolt": 6,
+    "thunderboltVersion": 5,
+    "usbA": 2,
+    "hdmi": 1,
+    "sdCard": true,
+    "ethernet": true,
+    "headphone": true
+  },
   "weightKg": 2.74,
   "configs": [
-    { "chipId": "m4-max-14c-32g",   "memoryGb": 36, "storageGb": 512,  "isBaseConfig": true,  "prices": [{ "krw": 3090000, "effectiveFrom": "2025-03-12" }] },
-    { "chipId": "m4-max-16c-40g",   "memoryGb": 48, "storageGb": 512,  "isBaseConfig": false, "prices": [{ "krw": 3790000, "effectiveFrom": "2025-03-12" }] },
-    { "chipId": "m3-ultra-28c-60g", "memoryGb": 96, "storageGb": 1024, "isBaseConfig": false, "prices": [{ "krw": 5990000, "effectiveFrom": "2025-03-12" }] }
+    {
+      "chipId": "m4-max-14c-32g",
+      "memoryGb": 36,
+      "storageGb": 512,
+      "isBaseConfig": true,
+      "prices": [
+        {
+          "krw": 3290000,
+          "effectiveFrom": "2025-03-12"
+        }
+      ]
+    },
+    {
+      "chipId": "m4-max-16c-40g",
+      "memoryGb": 48,
+      "storageGb": 512,
+      "isBaseConfig": false,
+      "prices": [
+        {
+          "krw": 3990000,
+          "effectiveFrom": "2025-03-12"
+        }
+      ]
+    },
+    {
+      "chipId": "m3-ultra-28c-60g",
+      "memoryGb": 96,
+      "storageGb": 1024,
+      "isBaseConfig": false,
+      "prices": [
+        {
+          "krw": 6590000,
+          "effectiveFrom": "2025-03-12"
+        }
+      ]
+    }
   ],
   "upgrades": [
-    {"kind":"memory","fromValue":36,"toValue":48,"krw":400000,"chipId":"m4-max-14c-32g"},
-    {"kind":"memory","fromValue":48,"toValue":64,"krw":600000,"chipId":"m4-max-16c-40g"},
-    {"kind":"memory","fromValue":48,"toValue":128,"krw":2400000,"chipId":"m4-max-16c-40g"},
-    {"kind":"memory","fromValue":96,"toValue":256,"krw":2800000,"chipId":"m3-ultra-28c-60g"},
-    {"kind":"storage","fromValue":512,"toValue":1024,"krw":300000},{"kind":"storage","fromValue":512,"toValue":2048,"krw":900000},{"kind":"storage","fromValue":512,"toValue":4096,"krw":1800000}, {"kind":"storage","fromValue":1024,"toValue":2048,"krw":600000},{"kind":"storage","fromValue":1024,"toValue":4096,"krw":1500000},{"kind":"storage","fromValue":1024,"toValue":8192,"krw":3000000}
+    {
+      "kind": "memory",
+      "fromValue": 36,
+      "toValue": 48,
+      "krw": 400000,
+      "chipId": "m4-max-14c-32g"
+    },
+    {
+      "kind": "memory",
+      "fromValue": 48,
+      "toValue": 64,
+      "krw": 600000,
+      "chipId": "m4-max-16c-40g"
+    },
+    {
+      "kind": "memory",
+      "fromValue": 48,
+      "toValue": 128,
+      "krw": 2400000,
+      "chipId": "m4-max-16c-40g"
+    },
+    {
+      "kind": "memory",
+      "fromValue": 96,
+      "toValue": 256,
+      "krw": 2800000,
+      "chipId": "m3-ultra-28c-60g"
+    },
+    {
+      "kind": "storage",
+      "fromValue": 512,
+      "toValue": 1024,
+      "krw": 300000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 512,
+      "toValue": 2048,
+      "krw": 900000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 512,
+      "toValue": 4096,
+      "krw": 1800000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 1024,
+      "toValue": 2048,
+      "krw": 600000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 1024,
+      "toValue": 4096,
+      "krw": 1500000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 1024,
+      "toValue": 8192,
+      "krw": 3000000
+    }
   ],
-  "sourceUrl": "https://support.apple.com/kr-kr/122210", "checkedAt": "2026-08-29", "verified": false
+  "sourceUrl": "https://support.apple.com/kr-kr/122210",
+  "checkedAt": "2026-08-29",
+  "verified": true,
+  "verifiedSource": "press"
 }

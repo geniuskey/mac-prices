@@ -201,7 +201,11 @@ export default function PriceTable({
                     <div className="flex flex-wrap items-center gap-x-1.5 gap-y-1">
                       <span className="font-medium">{row.displayName}</span>
                       {row.variantLabel && <Badge>{row.variantLabel}</Badge>}
-                      {!row.isCurrent && <Badge>단종</Badge>}
+                      {row.upcoming ? (
+                        <Badge tone="accent">출시 예정</Badge>
+                      ) : (
+                        !row.isCurrent && <Badge>단종</Badge>
+                      )}
                     </div>
                     <div className="mt-0.5 text-[12px]" style={{ color: 'var(--muted)' }}>
                       {/* 코어 수를 항상 보여야 같은 칩의 GPU 바인닝

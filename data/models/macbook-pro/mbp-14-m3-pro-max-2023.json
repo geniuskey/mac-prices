@@ -1,14 +1,115 @@
 {
-  "id": "mbp-14-m3-pro-max-2023", "family": "macbook-pro",
+  "id": "mbp-14-m3-pro-max-2023",
+  "family": "macbook-pro",
   "displayName": "MacBook Pro 14 (M3 Pro/Max, 2023)",
-  "releasedAt": "2023-11-07", "discontinuedAt": "2024-11-08",
-  "display": { "sizeInch": 14.2, "resolution": "3024x1964", "nits": 1000, "proMotion": true },
-  "ports": { "thunderbolt": 3, "thunderboltVersion": 4, "hdmi": 1, "sdCard": true, "magsafe": true, "headphone": true }, "weightKg": 1.61,
+  "releasedAt": "2023-11-07",
+  "discontinuedAt": "2024-11-08",
+  "display": {
+    "sizeInch": 14.2,
+    "resolution": "3024x1964",
+    "nits": 1000,
+    "proMotion": true
+  },
+  "ports": {
+    "thunderbolt": 3,
+    "thunderboltVersion": 4,
+    "hdmi": 1,
+    "sdCard": true,
+    "magsafe": true,
+    "headphone": true
+  },
+  "weightKg": 1.61,
   "configs": [
-    { "chipId": "m3-pro-11c-14g", "memoryGb": 18, "storageGb": 512,  "isBaseConfig": true,  "prices": [{ "krw": 2990000, "effectiveFrom": "2023-11-07" }] },
-    { "chipId": "m3-pro-12c-18g", "memoryGb": 18, "storageGb": 1024, "isBaseConfig": false, "prices": [{ "krw": 3390000, "effectiveFrom": "2023-11-07" }] },
-    { "chipId": "m3-max-14c-30g", "memoryGb": 36, "storageGb": 1024, "isBaseConfig": false, "prices": [{ "krw": 4190000, "effectiveFrom": "2023-11-07" }] }
+    {
+      "chipId": "m3-pro-11c-14g",
+      "memoryGb": 18,
+      "storageGb": 512,
+      "isBaseConfig": true,
+      "prices": [
+        {
+          "krw": 2990000,
+          "effectiveFrom": "2023-11-07"
+        }
+      ]
+    },
+    {
+      "chipId": "m3-pro-12c-18g",
+      "memoryGb": 18,
+      "storageGb": 1024,
+      "isBaseConfig": false,
+      "prices": [
+        {
+          "krw": 3390000,
+          "effectiveFrom": "2023-11-07"
+        }
+      ]
+    },
+    {
+      "chipId": "m3-max-14c-30g",
+      "memoryGb": 36,
+      "storageGb": 1024,
+      "isBaseConfig": false,
+      "prices": [
+        {
+          "krw": 4190000,
+          "effectiveFrom": "2023-11-07"
+        }
+      ]
+    }
   ],
-  "upgrades": [ {"kind":"memory","fromValue":18,"toValue":36,"krw":600000},{"kind":"memory","fromValue":36,"toValue":96,"krw":1600000,"chipId":"m3-max-14c-30g"}, {"kind":"storage","fromValue":512,"toValue":1024,"krw":300000},{"kind":"storage","fromValue":512,"toValue":2048,"krw":900000},{"kind":"storage","fromValue":512,"toValue":4096,"krw":1800000}, {"kind":"storage","fromValue":1024,"toValue":2048,"krw":600000},{"kind":"storage","fromValue":1024,"toValue":4096,"krw":1500000},{"kind":"storage","fromValue":1024,"toValue":8192,"krw":3000000} ],
-  "sourceUrl": "https://support.apple.com/kr-kr/117736", "checkedAt": "2026-08-29", "verified": false
+  "upgrades": [
+    {
+      "kind": "memory",
+      "fromValue": 18,
+      "toValue": 36,
+      "krw": 600000
+    },
+    {
+      "kind": "memory",
+      "fromValue": 36,
+      "toValue": 96,
+      "krw": 1600000,
+      "chipId": "m3-max-14c-30g"
+    },
+    {
+      "kind": "storage",
+      "fromValue": 512,
+      "toValue": 1024,
+      "krw": 300000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 512,
+      "toValue": 2048,
+      "krw": 900000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 512,
+      "toValue": 4096,
+      "krw": 1800000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 1024,
+      "toValue": 2048,
+      "krw": 600000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 1024,
+      "toValue": 4096,
+      "krw": 1500000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 1024,
+      "toValue": 8192,
+      "krw": 3000000
+    }
+  ],
+  "sourceUrl": "https://support.apple.com/kr-kr/117736",
+  "checkedAt": "2026-08-29",
+  "verified": true,
+  "verifiedSource": "press"
 }

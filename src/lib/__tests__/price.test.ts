@@ -44,6 +44,7 @@ const model: Model = {
   ],
   checkedAt: '2026-08-29',
   verified: false,
+  upgradesVerified: false,
 }
 
 describe('priceAt', () => {

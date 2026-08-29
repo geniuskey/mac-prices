@@ -27,11 +27,13 @@ export default function Explorer({
   models: modelList,
   oldestCheckedAt,
   verifiedCount,
+  upgradesVerifiedCount,
 }: {
   rows: Row[]
   models: Model[]
   oldestCheckedAt: string
   verifiedCount: number
+  upgradesVerifiedCount: number
 }) {
   // 필터·정렬·동일조건·선택은 전부 URL 이 원본이다. 별도 state 를 두면
   // 두 벌이 어긋나고, 링크를 붙여넣었을 때 화면과 주소가 따로 논다.
@@ -215,22 +217,32 @@ export default function Explorer({
             정가(VAT 포함)를 한 표에서 비교합니다.
           </p>
 
-          {unverified > 0 && (
-            <div
-              className="mt-3 rounded-lg border px-3 py-2 text-[12.5px]"
-              style={{
-                borderColor: 'var(--warn)',
-                background: 'var(--warn-soft)',
-                color: 'var(--warn)',
-              }}
-            >
-              <strong>가격 대조 진행률 {verifiedCount}/{modelList.length}</strong>
-              {' — '}
-              아직 {unverified}개 모델의 가격이 apple.com/kr 과 대조되지
-              않았습니다. 구매 전 반드시 Apple 스토어에서 실제 가격을 확인하세요.
-              (데이터 기준일 {oldestCheckedAt})
-            </div>
-          )}
+          <div
+            className="mt-3 rounded-lg border px-3 py-2 text-[12.5px]"
+            style={{
+              borderColor: 'var(--warn)',
+              background: 'var(--warn-soft)',
+              color: 'var(--warn)',
+            }}
+          >
+            <strong>
+              기본 정가 대조 {verifiedCount}/{modelList.length}
+            </strong>
+            {' — '}
+            대조된 가격은 언론 보도 기준이며 apple.com/kr 직접 확인은 아닙니다.
+            {unverified > 0 && ` 아직 ${unverified}개 모델은 대조 전입니다.`}
+            <br />
+            <strong>
+              BTO 업그레이드 단가 대조 {upgradesVerifiedCount}/{modelList.length}
+            </strong>
+            {' — '}
+            메모리·저장장치 추가 비용은 <b>추정값</b>입니다. 2026년 6월 Apple 이
+            메모리 업그레이드 가격을 두 배로 올려 세대마다 크게 다릅니다. 동일
+            조건 비교의 업그레이드 금액은 참고용으로만 보세요.
+            <br />
+            구매 전 반드시 Apple 스토어에서 실제 가격을 확인하세요. (데이터
+            기준일 {oldestCheckedAt})
+          </div>
         </div>
       </header>
 
@@ -288,8 +300,11 @@ export default function Explorer({
                 />
               </div>
               <span className="text-[12px]" style={{ color: 'var(--muted)' }}>
-                모든 모델을 같은 사양으로 맞췄을 때의 실제 구매가입니다. 기본
-                구성에 BTO 업그레이드 비용을 더해 계산합니다.
+                모든 모델을 같은 사양으로 맞췄을 때의 구매가입니다. 기본 구성에
+                BTO 업그레이드 비용을 더해 계산합니다.{' '}
+                <b style={{ color: 'var(--warn)' }}>
+                  업그레이드 단가는 아직 대조되지 않은 추정값입니다.
+                </b>
               </span>
             </>
           ) : (

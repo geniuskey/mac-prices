@@ -4,17 +4,84 @@
   "displayName": "MacBook Air 13 (M1, 2020)",
   "releasedAt": "2020-11-17",
   "discontinuedAt": "2024-03-08",
-  "display": { "sizeInch": 13.3, "resolution": "2560x1600", "nits": 400, "proMotion": false },
-  "ports": { "thunderbolt": 2, "thunderboltVersion": 3, "headphone": true },
+  "display": {
+    "sizeInch": 13.3,
+    "resolution": "2560x1600",
+    "nits": 400,
+    "proMotion": false
+  },
+  "ports": {
+    "thunderbolt": 2,
+    "thunderboltVersion": 3,
+    "headphone": true
+  },
   "weightKg": 1.29,
   "configs": [
-    { "chipId": "m1-8c-7g", "memoryGb": 8, "storageGb": 256, "isBaseConfig": true,  "prices": [{ "krw": 1290000, "effectiveFrom": "2020-11-17" }] },
-    { "chipId": "m1-8c-8g", "memoryGb": 8, "storageGb": 512, "isBaseConfig": false, "prices": [{ "krw": 1590000, "effectiveFrom": "2020-11-17" }] }
+    {
+      "chipId": "m1-8c-7g",
+      "memoryGb": 8,
+      "storageGb": 256,
+      "isBaseConfig": true,
+      "prices": [
+        {
+          "krw": 1290000,
+          "effectiveFrom": "2020-11-17"
+        }
+      ]
+    },
+    {
+      "chipId": "m1-8c-8g",
+      "memoryGb": 8,
+      "storageGb": 512,
+      "isBaseConfig": false,
+      "prices": [
+        {
+          "krw": 1590000,
+          "effectiveFrom": "2020-11-17"
+        }
+      ]
+    }
   ],
   "upgrades": [
-    {"kind":"memory","fromValue":8,"toValue":16,"krw":250000},
-    {"kind":"storage","fromValue":256,"toValue":512,"krw":250000},{"kind":"storage","fromValue":256,"toValue":1024,"krw":550000},{"kind":"storage","fromValue":256,"toValue":2048,"krw":1150000}, {"kind":"storage","fromValue":512,"toValue":1024,"krw":300000},{"kind":"storage","fromValue":512,"toValue":2048,"krw":900000}
+    {
+      "kind": "memory",
+      "fromValue": 8,
+      "toValue": 16,
+      "krw": 250000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 256,
+      "toValue": 512,
+      "krw": 250000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 256,
+      "toValue": 1024,
+      "krw": 550000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 256,
+      "toValue": 2048,
+      "krw": 1150000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 512,
+      "toValue": 1024,
+      "krw": 300000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 512,
+      "toValue": 2048,
+      "krw": 900000
+    }
   ],
   "sourceUrl": "https://support.apple.com/kr-kr/111883",
-  "checkedAt": "2026-08-29", "verified": false
+  "checkedAt": "2026-08-29",
+  "verified": true,
+  "verifiedSource": "press"
 }

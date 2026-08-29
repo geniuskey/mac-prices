@@ -1,21 +1,131 @@
 {
-  "id": "mbp-16-m4-pro-max-2024", "family": "macbook-pro",
+  "id": "mbp-16-m4-pro-max-2024",
+  "family": "macbook-pro",
   "displayName": "MacBook Pro 16 (M4 Pro/Max, 2024)",
-  "releasedAt": "2024-11-08", "discontinuedAt": null,
-  "display": { "sizeInch": 16.2, "resolution": "3456x2234", "nits": 1000, "proMotion": true, "nanoTextureAvailable": true },
-  "ports": { "thunderbolt": 3, "thunderboltVersion": 5, "hdmi": 1, "sdCard": true, "magsafe": true, "headphone": true },
+  "releasedAt": "2024-11-08",
+  "discontinuedAt": "2026-03-11",
+  "display": {
+    "sizeInch": 16.2,
+    "resolution": "3456x2234",
+    "nits": 1000,
+    "proMotion": true,
+    "nanoTextureAvailable": true
+  },
+  "ports": {
+    "thunderbolt": 3,
+    "thunderboltVersion": 5,
+    "hdmi": 1,
+    "sdCard": true,
+    "magsafe": true,
+    "headphone": true
+  },
   "weightKg": 2.14,
   "configs": [
-    { "chipId": "m4-pro-14c-20g", "memoryGb": 24, "storageGb": 512,  "isBaseConfig": true,  "prices": [{ "krw": 3690000, "effectiveFrom": "2024-11-08" }] },
-    { "chipId": "m4-pro-14c-20g", "memoryGb": 48, "storageGb": 512,  "isBaseConfig": false, "prices": [{ "krw": 4090000, "effectiveFrom": "2024-11-08" }] },
-    { "chipId": "m4-max-16c-40g", "memoryGb": 48, "storageGb": 1024, "isBaseConfig": false, "prices": [{ "krw": 5290000, "effectiveFrom": "2024-11-08" }] }
+    {
+      "chipId": "m4-pro-14c-20g",
+      "memoryGb": 24,
+      "storageGb": 512,
+      "isBaseConfig": true,
+      "prices": [
+        {
+          "krw": 3690000,
+          "effectiveFrom": "2024-11-08"
+        }
+      ]
+    },
+    {
+      "chipId": "m4-pro-14c-20g",
+      "memoryGb": 48,
+      "storageGb": 512,
+      "isBaseConfig": false,
+      "prices": [
+        {
+          "krw": 4090000,
+          "effectiveFrom": "2024-11-08"
+        }
+      ]
+    },
+    {
+      "chipId": "m4-max-16c-40g",
+      "memoryGb": 48,
+      "storageGb": 1024,
+      "isBaseConfig": false,
+      "prices": [
+        {
+          "krw": 5290000,
+          "effectiveFrom": "2024-11-08"
+        }
+      ]
+    }
   ],
   "upgrades": [
-    {"kind":"memory","fromValue":24,"toValue":48,"krw":800000,"chipId":"m4-pro-14c-20g"},
-    {"kind":"memory","fromValue":24,"toValue":64,"krw":1200000,"chipId":"m4-pro-14c-20g"},
-    {"kind":"memory","fromValue":48,"toValue":64,"krw":600000,"chipId":"m4-max-16c-40g"},
-    {"kind":"memory","fromValue":48,"toValue":128,"krw":2400000,"chipId":"m4-max-16c-40g"},
-    {"kind":"storage","fromValue":512,"toValue":1024,"krw":300000},{"kind":"storage","fromValue":512,"toValue":2048,"krw":900000},{"kind":"storage","fromValue":512,"toValue":4096,"krw":1800000}, {"kind":"storage","fromValue":1024,"toValue":2048,"krw":600000},{"kind":"storage","fromValue":1024,"toValue":4096,"krw":1500000},{"kind":"storage","fromValue":1024,"toValue":8192,"krw":3000000}
+    {
+      "kind": "memory",
+      "fromValue": 24,
+      "toValue": 48,
+      "krw": 800000,
+      "chipId": "m4-pro-14c-20g"
+    },
+    {
+      "kind": "memory",
+      "fromValue": 24,
+      "toValue": 64,
+      "krw": 1200000,
+      "chipId": "m4-pro-14c-20g"
+    },
+    {
+      "kind": "memory",
+      "fromValue": 48,
+      "toValue": 64,
+      "krw": 600000,
+      "chipId": "m4-max-16c-40g"
+    },
+    {
+      "kind": "memory",
+      "fromValue": 48,
+      "toValue": 128,
+      "krw": 2400000,
+      "chipId": "m4-max-16c-40g"
+    },
+    {
+      "kind": "storage",
+      "fromValue": 512,
+      "toValue": 1024,
+      "krw": 300000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 512,
+      "toValue": 2048,
+      "krw": 900000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 512,
+      "toValue": 4096,
+      "krw": 1800000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 1024,
+      "toValue": 2048,
+      "krw": 600000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 1024,
+      "toValue": 4096,
+      "krw": 1500000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 1024,
+      "toValue": 8192,
+      "krw": 3000000
+    }
   ],
-  "sourceUrl": "https://support.apple.com/kr-kr/121554", "checkedAt": "2026-08-29", "verified": false
+  "sourceUrl": "https://support.apple.com/kr-kr/121554",
+  "checkedAt": "2026-08-29",
+  "verified": true,
+  "verifiedSource": "press"
 }

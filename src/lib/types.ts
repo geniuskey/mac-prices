@@ -34,6 +34,10 @@ export interface Row {
   ports?: Model['ports']
   weightKg?: number
   verified: boolean
+  verifiedSource?: 'apple-kr' | 'press' | 'retail'
+  upgradesVerified: boolean
+  /** 아직 출시되지 않은 모델 (발표만 된 상태) */
+  upcoming: boolean
   checkedAt: string
   sourceUrl?: string
   /** 동일 조건 비교가 켜졌을 때만 채워진다. */
@@ -58,4 +62,5 @@ export interface Dataset {
   /** 데이터 전체에서 가장 오래된 checkedAt — 사이트 기준일 표시에 쓴다. */
   oldestCheckedAt: string
   verifiedCount: number
+  upgradesVerifiedCount: number
 }

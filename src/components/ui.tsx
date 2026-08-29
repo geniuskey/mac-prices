@@ -103,3 +103,27 @@ export function Badge({
     </span>
   )
 }
+
+const SOURCE_LABEL: Record<string, string> = {
+  'apple-kr': 'Apple KR 대조',
+  press: '언론 보도 대조',
+  retail: '유통 시세 대조',
+}
+
+/** 이 가격이 어느 수준의 근거인지 그대로 드러낸다. */
+export function VerifyBadge({
+  verified,
+  source,
+}: {
+  verified: boolean
+  source?: string
+}) {
+  if (!verified) return <Badge tone="warn">가격 미대조</Badge>
+  // Apple 공식 확인만 안심할 수 있는 수준이다. 2차 출처는 경고색을 유지한다.
+  const strong = source === 'apple-kr'
+  return (
+    <Badge tone={strong ? 'accent' : 'warn'}>
+      {SOURCE_LABEL[source ?? ''] ?? '대조됨'}
+    </Badge>
+  )
+}

@@ -120,10 +120,23 @@ export const modelSchema = z.object({
   configs: z.array(configSchema).min(1),
   upgrades: z.array(upgradeSchema).default([]),
   sourceUrl: z.string().url().optional(),
-  /** 이 파일의 가격을 마지막으로 사람이 대조한 날 */
+  /** 이 파일의 가격을 마지막으로 대조한 날 */
   checkedAt: isoDate,
-  /** apple.com/kr 과 대조를 마쳤는가 */
+  /** 기본 구성 정가가 출처와 대조되었는가 */
   verified: z.boolean().default(false),
+  /**
+   * 무엇과 대조했는가. 'apple-kr' 이 가장 강하고, 언론 보도·유통 시세는
+   * 그보다 약하다. 어느 수준의 근거인지 화면에 그대로 드러낸다.
+   */
+  verifiedSource: z
+    .enum(['apple-kr', 'press', 'retail'])
+    .optional(),
+  /**
+   * BTO 업그레이드 단가는 별도로 추적한다. 기본 정가와 달리 보도 자료에
+   * 거의 나오지 않고, 2026-06 애플이 메모리 업그레이드 가격을 두 배로
+   * 올린 것처럼 따로 움직인다.
+   */
+  upgradesVerified: z.boolean().default(false),
   notes: z.string().optional(),
 })
 export type ModelInput = z.infer<typeof modelSchema>

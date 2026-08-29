@@ -48,7 +48,11 @@ export default function RowCard({
           <div className="flex flex-wrap items-center gap-x-1.5 gap-y-1">
             <span className="text-[14px] font-semibold">{row.displayName}</span>
             {row.variantLabel && <Badge>{row.variantLabel}</Badge>}
-            {!row.isCurrent && <Badge>단종</Badge>}
+            {row.upcoming ? (
+              <Badge tone="accent">출시 예정</Badge>
+            ) : (
+              !row.isCurrent && <Badge>단종</Badge>
+            )}
           </div>
 
           <div className="mt-0.5 text-[12px]" style={{ color: 'var(--muted)' }}>

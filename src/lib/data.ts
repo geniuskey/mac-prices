@@ -157,5 +157,6 @@ export function loadDataset(asOf = new Date().toISOString().slice(0, 10)): Datas
     rows,
     oldestCheckedAt: checkedDates[0] ?? asOf,
     verifiedCount: models.filter((m) => m.verified).length,
+    upgradesVerifiedCount: models.filter((m) => m.upgradesVerified).length,
   }
 }

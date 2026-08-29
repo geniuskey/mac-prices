@@ -3,7 +3,7 @@
 import { useMemo, useState } from 'react'
 import type { Model, Row } from '@/lib/types'
 import { formatKrw, formatStorage, normalizeModel } from '@/lib/price'
-import { Badge, FieldLabel, Select } from './ui'
+import { Badge, FieldLabel, Select, VerifyBadge } from './ui'
 
 function Spec({ label, value }: { label: string; value: string | null }) {
   if (value === null) return null
@@ -104,6 +104,11 @@ function Calculator({ model, row }: { model: Model; row: Row }) {
               기본 {formatKrw(result.baseKrw)}
               {result.upgradeKrw > 0 && ` + 업그레이드 ${formatKrw(result.upgradeKrw)}`}
             </div>
+            {result.upgradeKrw > 0 && !row.upgradesVerified && (
+              <div className="mt-1 text-[11px]" style={{ color: 'var(--warn)' }}>
+                업그레이드 단가는 대조되지 않은 추정값입니다
+              </div>
+            )}
           </>
         ) : (
           <div className="text-[13px]" style={{ color: 'var(--warn)' }}>
@@ -210,16 +215,15 @@ export default function RowDetail({ row, model }: { row: Row; model: Model }) {
 
         <div className="mt-3 space-y-1">
           <div className="flex flex-wrap gap-1">
-            {row.isCurrent ? (
+            {row.upcoming ? (
+              <Badge tone="accent">출시 예정 {row.releasedAt}</Badge>
+            ) : row.isCurrent ? (
               <Badge tone="accent">현행 판매</Badge>
             ) : (
               <Badge>단종 {row.discontinuedAt}</Badge>
             )}
-            {row.verified ? (
-              <Badge tone="accent">가격 대조 완료</Badge>
-            ) : (
-              <Badge tone="warn">가격 미대조</Badge>
-            )}
+            <VerifyBadge verified={row.verified} source={row.verifiedSource} />
+            {!row.upgradesVerified && <Badge tone="warn">업그레이드가 추정</Badge>}
           </div>
           <div style={{ color: 'var(--muted)' }}>
             출시 {row.releasedAt} · 확인 {row.checkedAt}

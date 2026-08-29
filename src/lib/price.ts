@@ -58,6 +58,9 @@ export function buildRows(
         ports: model.ports,
         weightKg: model.weightKg,
         verified: model.verified,
+        verifiedSource: model.verifiedSource,
+        upgradesVerified: model.upgradesVerified,
+        upcoming: model.releasedAt > asOf,
         checkedAt: model.checkedAt,
         sourceUrl: model.sourceUrl,
       })

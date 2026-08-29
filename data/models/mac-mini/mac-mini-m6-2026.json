@@ -1,0 +1,17 @@
+{
+  "id": "mac-mini-m6-2026", "family": "mac-mini",
+  "displayName": "Mac mini (M6, 2026)",
+  "releasedAt": "2026-09-22", "discontinuedAt": null, "display": null,
+  "ports": { "thunderbolt": 3, "thunderboltVersion": 4, "usbA": 0, "hdmi": 1, "ethernet": true, "headphone": true },
+  "weightKg": 0.67,
+  "configs": [
+    { "chipId": "m6-12c-12g", "memoryGb": 16, "storageGb": 256, "isBaseConfig": true, "prices": [{ "krw": 1499000, "effectiveFrom": "2026-09-22" }] }
+  ],
+  "upgrades": [
+    {"kind":"memory","fromValue":16,"toValue":32,"krw":680000},
+    {"kind":"storage","fromValue":256,"toValue":512,"krw":250000},{"kind":"storage","fromValue":256,"toValue":1024,"krw":550000},{"kind":"storage","fromValue":256,"toValue":2048,"krw":1150000}
+  ],
+  "sourceUrl": "https://www.apple.com/newsroom/2026/08/apple-unveils-a-more-powerful-mac-mini-featuring-the-all-new-m6-and-m5-pro/",
+  "checkedAt": "2026-08-29", "verified": true, "verifiedSource": "press", "upgradesVerified": false,
+  "notes": "시작가가 전작 89만원에서 149만9천원으로 60만원 올랐다. 애플 첫 2nm 칩. M5 Pro 구성의 한국 가격은 아직 확인되지 않아 넣지 않았다."
+}

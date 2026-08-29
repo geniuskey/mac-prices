@@ -1,13 +1,91 @@
 {
-  "id": "mac-mini-m2-pro-2023", "family": "mac-mini",
+  "id": "mac-mini-m2-pro-2023",
+  "family": "mac-mini",
   "displayName": "Mac mini (M2 Pro, 2023)",
-  "releasedAt": "2023-01-24", "discontinuedAt": "2024-11-08", "display": null,
-  "ports": { "thunderbolt": 4, "thunderboltVersion": 4, "usbA": 2, "hdmi": 1, "ethernet": true, "headphone": true },
+  "releasedAt": "2023-01-24",
+  "discontinuedAt": "2024-11-08",
+  "display": null,
+  "ports": {
+    "thunderbolt": 4,
+    "thunderboltVersion": 4,
+    "usbA": 2,
+    "hdmi": 1,
+    "ethernet": true,
+    "headphone": true
+  },
   "weightKg": 1.28,
   "configs": [
-    { "chipId": "m2-pro-10c-16g", "memoryGb": 16, "storageGb": 512, "isBaseConfig": true,  "prices": [{ "krw": 1890000, "effectiveFrom": "2023-01-24" }] },
-    { "chipId": "m2-pro-12c-19g", "memoryGb": 16, "storageGb": 512, "isBaseConfig": false, "prices": [{ "krw": 2190000, "effectiveFrom": "2023-01-24" }] }
+    {
+      "chipId": "m2-pro-10c-16g",
+      "memoryGb": 16,
+      "storageGb": 512,
+      "isBaseConfig": true,
+      "prices": [
+        {
+          "krw": 1790000,
+          "effectiveFrom": "2023-01-24"
+        }
+      ]
+    },
+    {
+      "chipId": "m2-pro-12c-19g",
+      "memoryGb": 16,
+      "storageGb": 512,
+      "isBaseConfig": false,
+      "prices": [
+        {
+          "krw": 2090000,
+          "effectiveFrom": "2023-01-24"
+        }
+      ]
+    }
   ],
-  "upgrades": [ {"kind":"memory","fromValue":16,"toValue":32,"krw":600000}, {"kind":"storage","fromValue":512,"toValue":1024,"krw":300000},{"kind":"storage","fromValue":512,"toValue":2048,"krw":900000},{"kind":"storage","fromValue":512,"toValue":4096,"krw":1800000}, {"kind":"storage","fromValue":1024,"toValue":2048,"krw":600000},{"kind":"storage","fromValue":1024,"toValue":4096,"krw":1500000},{"kind":"storage","fromValue":1024,"toValue":8192,"krw":3000000} ],
-  "sourceUrl": "https://support.apple.com/kr-kr/111931", "checkedAt": "2026-08-29", "verified": false
+  "upgrades": [
+    {
+      "kind": "memory",
+      "fromValue": 16,
+      "toValue": 32,
+      "krw": 600000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 512,
+      "toValue": 1024,
+      "krw": 300000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 512,
+      "toValue": 2048,
+      "krw": 900000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 512,
+      "toValue": 4096,
+      "krw": 1800000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 1024,
+      "toValue": 2048,
+      "krw": 600000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 1024,
+      "toValue": 4096,
+      "krw": 1500000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 1024,
+      "toValue": 8192,
+      "krw": 3000000
+    }
+  ],
+  "sourceUrl": "https://support.apple.com/kr-kr/111931",
+  "checkedAt": "2026-08-29",
+  "verified": true,
+  "verifiedSource": "press"
 }
