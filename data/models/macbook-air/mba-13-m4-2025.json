@@ -1,0 +1,94 @@
+{
+  "id": "mba-13-m4-2025",
+  "family": "macbook-air",
+  "displayName": "MacBook Air 13 (M4, 2025)",
+  "releasedAt": "2025-03-12",
+  "discontinuedAt": "2026-03-11",
+  "display": {
+    "sizeInch": 13.6,
+    "resolution": "2560x1664",
+    "nits": 500,
+    "proMotion": false
+  },
+  "ports": {
+    "thunderbolt": 2,
+    "thunderboltVersion": 4,
+    "magsafe": true,
+    "headphone": true
+  },
+  "weightKg": 1.24,
+  "configs": [
+    {
+      "chipId": "m4-10c-8g",
+      "memoryGb": 16,
+      "storageGb": 256,
+      "isBaseConfig": true,
+      "prices": [
+        {
+          "krw": 1590000,
+          "effectiveFrom": "2025-03-12"
+        }
+      ]
+    },
+    {
+      "chipId": "m4-10c-10g",
+      "memoryGb": 16,
+      "storageGb": 512,
+      "isBaseConfig": false,
+      "prices": [
+        {
+          "krw": 1990000,
+          "effectiveFrom": "2025-03-12"
+        }
+      ]
+    }
+  ],
+  "upgrades": [
+    {
+      "kind": "memory",
+      "fromValue": 16,
+      "toValue": 24,
+      "krw": 250000
+    },
+    {
+      "kind": "memory",
+      "fromValue": 16,
+      "toValue": 32,
+      "krw": 500000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 256,
+      "toValue": 512,
+      "krw": 250000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 256,
+      "toValue": 1024,
+      "krw": 550000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 256,
+      "toValue": 2048,
+      "krw": 1150000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 512,
+      "toValue": 1024,
+      "krw": 300000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 512,
+      "toValue": 2048,
+      "krw": 900000
+    }
+  ],
+  "sourceUrl": "https://support.apple.com/kr-kr/122208",
+  "checkedAt": "2026-08-29",
+  "verified": true,
+  "verifiedSource": "press"
+}

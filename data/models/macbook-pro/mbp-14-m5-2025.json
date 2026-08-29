@@ -1,0 +1,20 @@
+{
+  "id": "mbp-14-m5-2025", "family": "macbook-pro",
+  "displayName": "MacBook Pro 14 (M5, 2025)",
+  "releasedAt": "2025-10-22", "discontinuedAt": null,
+  "display": { "sizeInch": 14.2, "resolution": "3024x1964", "nits": 1000, "proMotion": true, "nanoTextureAvailable": true },
+  "ports": { "thunderbolt": 3, "thunderboltVersion": 4, "hdmi": 1, "sdCard": true, "magsafe": true, "headphone": true },
+  "weightKg": 1.55,
+  "configs": [
+    { "chipId": "m5-10c-10g", "memoryGb": 16, "storageGb": 512,  "isBaseConfig": true,  "educationKrw": 2240000, "prices": [{ "krw": 2390000, "effectiveFrom": "2025-10-22" }] },
+    { "chipId": "m5-10c-10g", "memoryGb": 16, "storageGb": 1024, "isBaseConfig": false, "prices": [{ "krw": 2690000, "effectiveFrom": "2025-10-22" }] }
+  ],
+  "upgrades": [
+    {"kind":"memory","fromValue":16,"toValue":24,"krw":300000},
+    {"kind":"memory","fromValue":16,"toValue":32,"krw":680000},
+    {"kind":"storage","fromValue":512,"toValue":1024,"krw":300000},{"kind":"storage","fromValue":512,"toValue":2048,"krw":900000},{"kind":"storage","fromValue":512,"toValue":4096,"krw":1800000}, {"kind":"storage","fromValue":1024,"toValue":2048,"krw":600000},{"kind":"storage","fromValue":1024,"toValue":4096,"krw":1500000},{"kind":"storage","fromValue":1024,"toValue":8192,"krw":3000000}
+  ],
+  "sourceUrl": "https://www.apple.com/newsroom/2025/10/apple-unveils-new-14-inch-macbook-pro-powered-by-the-m5-chip/",
+  "checkedAt": "2026-08-29", "verified": true, "verifiedSource": "press", "upgradesVerified": false,
+  "notes": "M5 14형 기본 모델. M5 Pro/Max 는 2026년 3월에 별도 출시되었다."
+}

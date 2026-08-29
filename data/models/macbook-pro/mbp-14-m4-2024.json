@@ -1,0 +1,103 @@
+{
+  "id": "mbp-14-m4-2024",
+  "family": "macbook-pro",
+  "displayName": "MacBook Pro 14 (M4, 2024)",
+  "releasedAt": "2024-11-08",
+  "discontinuedAt": "2025-10-22",
+  "display": {
+    "sizeInch": 14.2,
+    "resolution": "3024x1964",
+    "nits": 1000,
+    "proMotion": true,
+    "nanoTextureAvailable": true
+  },
+  "ports": {
+    "thunderbolt": 3,
+    "thunderboltVersion": 4,
+    "hdmi": 1,
+    "sdCard": true,
+    "magsafe": true,
+    "headphone": true
+  },
+  "weightKg": 1.55,
+  "configs": [
+    {
+      "chipId": "m4-10c-10g",
+      "memoryGb": 16,
+      "storageGb": 512,
+      "isBaseConfig": true,
+      "prices": [
+        {
+          "krw": 2390000,
+          "effectiveFrom": "2024-11-08"
+        }
+      ]
+    },
+    {
+      "chipId": "m4-10c-10g",
+      "memoryGb": 16,
+      "storageGb": 1024,
+      "isBaseConfig": false,
+      "prices": [
+        {
+          "krw": 2690000,
+          "effectiveFrom": "2024-11-08"
+        }
+      ]
+    }
+  ],
+  "upgrades": [
+    {
+      "kind": "memory",
+      "fromValue": 16,
+      "toValue": 24,
+      "krw": 300000
+    },
+    {
+      "kind": "memory",
+      "fromValue": 16,
+      "toValue": 32,
+      "krw": 600000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 512,
+      "toValue": 1024,
+      "krw": 300000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 512,
+      "toValue": 2048,
+      "krw": 900000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 512,
+      "toValue": 4096,
+      "krw": 1800000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 1024,
+      "toValue": 2048,
+      "krw": 600000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 1024,
+      "toValue": 4096,
+      "krw": 1500000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 1024,
+      "toValue": 8192,
+      "krw": 3000000
+    }
+  ],
+  "sourceUrl": "https://support.apple.com/kr-kr/121552",
+  "checkedAt": "2026-08-29",
+  "verified": true,
+  "verifiedSource": "press"
+}

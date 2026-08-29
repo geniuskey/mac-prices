@@ -1,0 +1,108 @@
+{
+  "id": "mbp-16-m1-pro-max-2021",
+  "family": "macbook-pro",
+  "displayName": "MacBook Pro 16 (M1 Pro/Max, 2021)",
+  "releasedAt": "2021-10-26",
+  "discontinuedAt": "2023-01-24",
+  "display": {
+    "sizeInch": 16.2,
+    "resolution": "3456x2234",
+    "nits": 1000,
+    "proMotion": true
+  },
+  "ports": {
+    "thunderbolt": 3,
+    "thunderboltVersion": 4,
+    "hdmi": 1,
+    "sdCard": true,
+    "magsafe": true,
+    "headphone": true
+  },
+  "weightKg": 2.1,
+  "configs": [
+    {
+      "chipId": "m1-pro-10c-16g",
+      "memoryGb": 16,
+      "storageGb": 512,
+      "isBaseConfig": true,
+      "prices": [
+        {
+          "krw": 3360000,
+          "effectiveFrom": "2021-10-26"
+        }
+      ]
+    },
+    {
+      "chipId": "m1-pro-10c-16g",
+      "memoryGb": 16,
+      "storageGb": 1024,
+      "isBaseConfig": false,
+      "prices": [
+        {
+          "krw": 3660000,
+          "effectiveFrom": "2021-10-26"
+        }
+      ]
+    },
+    {
+      "chipId": "m1-max-10c-32g",
+      "memoryGb": 32,
+      "storageGb": 1024,
+      "isBaseConfig": false,
+      "prices": [
+        {
+          "krw": 4390000,
+          "effectiveFrom": "2021-10-26"
+        }
+      ]
+    }
+  ],
+  "upgrades": [
+    {
+      "kind": "memory",
+      "fromValue": 16,
+      "toValue": 32,
+      "krw": 600000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 512,
+      "toValue": 1024,
+      "krw": 300000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 512,
+      "toValue": 2048,
+      "krw": 900000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 512,
+      "toValue": 4096,
+      "krw": 1800000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 1024,
+      "toValue": 2048,
+      "krw": 600000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 1024,
+      "toValue": 4096,
+      "krw": 1500000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 1024,
+      "toValue": 8192,
+      "krw": 3000000
+    }
+  ],
+  "sourceUrl": "https://support.apple.com/kr-kr/111901",
+  "checkedAt": "2026-08-29",
+  "verified": true,
+  "verifiedSource": "press"
+}

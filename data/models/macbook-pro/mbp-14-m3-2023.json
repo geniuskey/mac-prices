@@ -1,0 +1,102 @@
+{
+  "id": "mbp-14-m3-2023",
+  "family": "macbook-pro",
+  "displayName": "MacBook Pro 14 (M3, 2023)",
+  "releasedAt": "2023-11-07",
+  "discontinuedAt": "2024-11-08",
+  "display": {
+    "sizeInch": 14.2,
+    "resolution": "3024x1964",
+    "nits": 1000,
+    "proMotion": true
+  },
+  "ports": {
+    "thunderbolt": 2,
+    "thunderboltVersion": 4,
+    "hdmi": 1,
+    "sdCard": true,
+    "magsafe": true,
+    "headphone": true
+  },
+  "weightKg": 1.55,
+  "configs": [
+    {
+      "chipId": "m3-8c-10g",
+      "memoryGb": 8,
+      "storageGb": 512,
+      "isBaseConfig": true,
+      "prices": [
+        {
+          "krw": 2390000,
+          "effectiveFrom": "2023-11-07"
+        }
+      ]
+    },
+    {
+      "chipId": "m3-8c-10g",
+      "memoryGb": 8,
+      "storageGb": 1024,
+      "isBaseConfig": false,
+      "prices": [
+        {
+          "krw": 2690000,
+          "effectiveFrom": "2023-11-07"
+        }
+      ]
+    }
+  ],
+  "upgrades": [
+    {
+      "kind": "memory",
+      "fromValue": 8,
+      "toValue": 16,
+      "krw": 300000
+    },
+    {
+      "kind": "memory",
+      "fromValue": 8,
+      "toValue": 24,
+      "krw": 600000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 512,
+      "toValue": 1024,
+      "krw": 300000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 512,
+      "toValue": 2048,
+      "krw": 900000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 512,
+      "toValue": 4096,
+      "krw": 1800000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 1024,
+      "toValue": 2048,
+      "krw": 600000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 1024,
+      "toValue": 4096,
+      "krw": 1500000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 1024,
+      "toValue": 8192,
+      "krw": 3000000
+    }
+  ],
+  "sourceUrl": "https://support.apple.com/kr-kr/117735",
+  "checkedAt": "2026-08-29",
+  "verified": true,
+  "verifiedSource": "press"
+}

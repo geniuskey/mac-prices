@@ -1,0 +1,108 @@
+{
+  "id": "mbp-14-m2-pro-max-2023",
+  "family": "macbook-pro",
+  "displayName": "MacBook Pro 14 (M2 Pro/Max, 2023)",
+  "releasedAt": "2023-01-24",
+  "discontinuedAt": "2023-11-07",
+  "display": {
+    "sizeInch": 14.2,
+    "resolution": "3024x1964",
+    "nits": 1000,
+    "proMotion": true
+  },
+  "ports": {
+    "thunderbolt": 3,
+    "thunderboltVersion": 4,
+    "hdmi": 1,
+    "sdCard": true,
+    "magsafe": true,
+    "headphone": true
+  },
+  "weightKg": 1.6,
+  "configs": [
+    {
+      "chipId": "m2-pro-10c-16g",
+      "memoryGb": 16,
+      "storageGb": 512,
+      "isBaseConfig": true,
+      "prices": [
+        {
+          "krw": 2790000,
+          "effectiveFrom": "2023-01-24"
+        }
+      ]
+    },
+    {
+      "chipId": "m2-pro-12c-19g",
+      "memoryGb": 16,
+      "storageGb": 1024,
+      "isBaseConfig": false,
+      "prices": [
+        {
+          "krw": 3390000,
+          "effectiveFrom": "2023-01-24"
+        }
+      ]
+    },
+    {
+      "chipId": "m2-max-12c-30g",
+      "memoryGb": 32,
+      "storageGb": 1024,
+      "isBaseConfig": false,
+      "prices": [
+        {
+          "krw": 4190000,
+          "effectiveFrom": "2023-01-24"
+        }
+      ]
+    }
+  ],
+  "upgrades": [
+    {
+      "kind": "memory",
+      "fromValue": 16,
+      "toValue": 32,
+      "krw": 600000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 512,
+      "toValue": 1024,
+      "krw": 300000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 512,
+      "toValue": 2048,
+      "krw": 900000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 512,
+      "toValue": 4096,
+      "krw": 1800000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 1024,
+      "toValue": 2048,
+      "krw": 600000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 1024,
+      "toValue": 4096,
+      "krw": 1500000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 1024,
+      "toValue": 8192,
+      "krw": 3000000
+    }
+  ],
+  "sourceUrl": "https://support.apple.com/kr-kr/111340",
+  "checkedAt": "2026-08-29",
+  "verified": true,
+  "verifiedSource": "press"
+}

@@ -1,0 +1,98 @@
+{
+  "id": "mac-mini-m4-pro-2024",
+  "family": "mac-mini",
+  "displayName": "Mac mini (M4 Pro, 2024)",
+  "releasedAt": "2024-11-08",
+  "discontinuedAt": null,
+  "display": null,
+  "ports": {
+    "thunderbolt": 3,
+    "thunderboltVersion": 5,
+    "usbA": 0,
+    "hdmi": 1,
+    "ethernet": true,
+    "headphone": true
+  },
+  "weightKg": 0.73,
+  "configs": [
+    {
+      "chipId": "m4-pro-12c-16g",
+      "memoryGb": 24,
+      "storageGb": 512,
+      "isBaseConfig": true,
+      "prices": [
+        {
+          "krw": 2090000,
+          "effectiveFrom": "2024-11-08"
+        }
+      ]
+    },
+    {
+      "chipId": "m4-pro-14c-20g",
+      "memoryGb": 24,
+      "storageGb": 512,
+      "isBaseConfig": false,
+      "prices": [
+        {
+          "krw": 2490000,
+          "effectiveFrom": "2024-11-08"
+        }
+      ]
+    }
+  ],
+  "upgrades": [
+    {
+      "kind": "memory",
+      "fromValue": 24,
+      "toValue": 48,
+      "krw": 800000
+    },
+    {
+      "kind": "memory",
+      "fromValue": 24,
+      "toValue": 64,
+      "krw": 1200000,
+      "chipId": "m4-pro-14c-20g"
+    },
+    {
+      "kind": "storage",
+      "fromValue": 512,
+      "toValue": 1024,
+      "krw": 300000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 512,
+      "toValue": 2048,
+      "krw": 900000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 512,
+      "toValue": 4096,
+      "krw": 1800000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 1024,
+      "toValue": 2048,
+      "krw": 600000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 1024,
+      "toValue": 4096,
+      "krw": 1500000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 1024,
+      "toValue": 8192,
+      "krw": 3000000
+    }
+  ],
+  "sourceUrl": "https://support.apple.com/kr-kr/121555",
+  "checkedAt": "2026-08-29",
+  "verified": true,
+  "verifiedSource": "press"
+}
