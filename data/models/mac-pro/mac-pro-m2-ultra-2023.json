@@ -1,0 +1,18 @@
+{
+  "id": "mac-pro-m2-ultra-2023", "family": "mac-pro",
+  "displayName": "Mac Pro (M2 Ultra, 2023)",
+  "releasedAt": "2023-06-13", "discontinuedAt": null, "display": null,
+  "ports": { "thunderbolt": 8, "thunderboltVersion": 4, "usbA": 3, "hdmi": 2, "ethernet": true, "headphone": true },
+  "weightKg": 16.86,
+  "configs": [
+    { "chipId": "m2-ultra-24c-60g", "memoryGb": 64, "storageGb": 1024, "isBaseConfig": true,  "variantLabel": "타워", "prices": [{ "krw": 9890000,  "effectiveFrom": "2023-06-13" }] },
+    { "chipId": "m2-ultra-24c-60g", "memoryGb": 64, "storageGb": 1024, "isBaseConfig": false, "variantLabel": "랙",   "prices": [{ "krw": 11290000, "effectiveFrom": "2023-06-13" }] }
+  ],
+  "upgrades": [
+    {"kind":"memory","fromValue":64,"toValue":128,"krw":1200000},
+    {"kind":"memory","fromValue":64,"toValue":192,"krw":2400000},
+    {"kind":"storage","fromValue":1024,"toValue":2048,"krw":600000},{"kind":"storage","fromValue":1024,"toValue":4096,"krw":1500000},{"kind":"storage","fromValue":1024,"toValue":8192,"krw":3000000}
+  ],
+  "sourceUrl": "https://support.apple.com/kr-kr/111343", "checkedAt": "2026-08-29", "verified": false,
+  "notes": "타워/랙은 같은 구성이지만 케이스가 다르다. PCIe 확장 슬롯 6개."
+}

@@ -1,0 +1,48 @@
+[
+  { "id": "m1-8c-7g",  "family": "M1", "generation": 1, "tier": "base", "cpuCores": 8, "cpuPerformanceCores": 4, "cpuEfficiencyCores": 4, "gpuCores": 7, "neuralCores": 16, "memoryBandwidthGBps": 68.25, "maxMemoryGb": 16, "releasedAt": "2020-11-17" },
+  { "id": "m1-8c-8g",  "family": "M1", "generation": 1, "tier": "base", "cpuCores": 8, "cpuPerformanceCores": 4, "cpuEfficiencyCores": 4, "gpuCores": 8, "neuralCores": 16, "memoryBandwidthGBps": 68.25, "maxMemoryGb": 16, "releasedAt": "2020-11-17" },
+
+  { "id": "m1-pro-8c-14g",  "family": "M1 Pro", "generation": 1, "tier": "pro", "cpuCores": 8,  "cpuPerformanceCores": 6, "cpuEfficiencyCores": 2, "gpuCores": 14, "neuralCores": 16, "memoryBandwidthGBps": 200, "maxMemoryGb": 32, "releasedAt": "2021-10-26" },
+  { "id": "m1-pro-10c-14g", "family": "M1 Pro", "generation": 1, "tier": "pro", "cpuCores": 10, "cpuPerformanceCores": 8, "cpuEfficiencyCores": 2, "gpuCores": 14, "neuralCores": 16, "memoryBandwidthGBps": 200, "maxMemoryGb": 32, "releasedAt": "2021-10-26" },
+  { "id": "m1-pro-10c-16g", "family": "M1 Pro", "generation": 1, "tier": "pro", "cpuCores": 10, "cpuPerformanceCores": 8, "cpuEfficiencyCores": 2, "gpuCores": 16, "neuralCores": 16, "memoryBandwidthGBps": 200, "maxMemoryGb": 32, "releasedAt": "2021-10-26" },
+
+  { "id": "m1-max-10c-24g", "family": "M1 Max", "generation": 1, "tier": "max", "cpuCores": 10, "cpuPerformanceCores": 8, "cpuEfficiencyCores": 2, "gpuCores": 24, "neuralCores": 16, "memoryBandwidthGBps": 400, "maxMemoryGb": 64, "releasedAt": "2021-10-26" },
+  { "id": "m1-max-10c-32g", "family": "M1 Max", "generation": 1, "tier": "max", "cpuCores": 10, "cpuPerformanceCores": 8, "cpuEfficiencyCores": 2, "gpuCores": 32, "neuralCores": 16, "memoryBandwidthGBps": 400, "maxMemoryGb": 64, "releasedAt": "2021-10-26" },
+
+  { "id": "m1-ultra-20c-48g", "family": "M1 Ultra", "generation": 1, "tier": "ultra", "cpuCores": 20, "cpuPerformanceCores": 16, "cpuEfficiencyCores": 4, "gpuCores": 48, "neuralCores": 32, "memoryBandwidthGBps": 800, "maxMemoryGb": 128, "releasedAt": "2022-03-18" },
+  { "id": "m1-ultra-20c-64g", "family": "M1 Ultra", "generation": 1, "tier": "ultra", "cpuCores": 20, "cpuPerformanceCores": 16, "cpuEfficiencyCores": 4, "gpuCores": 64, "neuralCores": 32, "memoryBandwidthGBps": 800, "maxMemoryGb": 128, "releasedAt": "2022-03-18" },
+
+  { "id": "m2-8c-8g",  "family": "M2", "generation": 2, "tier": "base", "cpuCores": 8, "cpuPerformanceCores": 4, "cpuEfficiencyCores": 4, "gpuCores": 8,  "neuralCores": 16, "memoryBandwidthGBps": 100, "maxMemoryGb": 24, "releasedAt": "2022-06-24" },
+  { "id": "m2-8c-10g", "family": "M2", "generation": 2, "tier": "base", "cpuCores": 8, "cpuPerformanceCores": 4, "cpuEfficiencyCores": 4, "gpuCores": 10, "neuralCores": 16, "memoryBandwidthGBps": 100, "maxMemoryGb": 24, "releasedAt": "2022-06-24" },
+
+  { "id": "m2-pro-10c-16g", "family": "M2 Pro", "generation": 2, "tier": "pro", "cpuCores": 10, "cpuPerformanceCores": 6, "cpuEfficiencyCores": 4, "gpuCores": 16, "neuralCores": 16, "memoryBandwidthGBps": 200, "maxMemoryGb": 32, "releasedAt": "2023-01-24" },
+  { "id": "m2-pro-12c-19g", "family": "M2 Pro", "generation": 2, "tier": "pro", "cpuCores": 12, "cpuPerformanceCores": 8, "cpuEfficiencyCores": 4, "gpuCores": 19, "neuralCores": 16, "memoryBandwidthGBps": 200, "maxMemoryGb": 32, "releasedAt": "2023-01-24" },
+
+  { "id": "m2-max-12c-30g", "family": "M2 Max", "generation": 2, "tier": "max", "cpuCores": 12, "cpuPerformanceCores": 8, "cpuEfficiencyCores": 4, "gpuCores": 30, "neuralCores": 16, "memoryBandwidthGBps": 400, "maxMemoryGb": 96, "releasedAt": "2023-01-24" },
+  { "id": "m2-max-12c-38g", "family": "M2 Max", "generation": 2, "tier": "max", "cpuCores": 12, "cpuPerformanceCores": 8, "cpuEfficiencyCores": 4, "gpuCores": 38, "neuralCores": 16, "memoryBandwidthGBps": 400, "maxMemoryGb": 96, "releasedAt": "2023-01-24" },
+
+  { "id": "m2-ultra-24c-60g", "family": "M2 Ultra", "generation": 2, "tier": "ultra", "cpuCores": 24, "cpuPerformanceCores": 16, "cpuEfficiencyCores": 8, "gpuCores": 60, "neuralCores": 32, "memoryBandwidthGBps": 800, "maxMemoryGb": 192, "releasedAt": "2023-06-13" },
+  { "id": "m2-ultra-24c-76g", "family": "M2 Ultra", "generation": 2, "tier": "ultra", "cpuCores": 24, "cpuPerformanceCores": 16, "cpuEfficiencyCores": 8, "gpuCores": 76, "neuralCores": 32, "memoryBandwidthGBps": 800, "maxMemoryGb": 192, "releasedAt": "2023-06-13" },
+
+  { "id": "m3-8c-8g",  "family": "M3", "generation": 3, "tier": "base", "cpuCores": 8, "cpuPerformanceCores": 4, "cpuEfficiencyCores": 4, "gpuCores": 8,  "neuralCores": 16, "memoryBandwidthGBps": 100, "maxMemoryGb": 24, "releasedAt": "2023-11-07" },
+  { "id": "m3-8c-10g", "family": "M3", "generation": 3, "tier": "base", "cpuCores": 8, "cpuPerformanceCores": 4, "cpuEfficiencyCores": 4, "gpuCores": 10, "neuralCores": 16, "memoryBandwidthGBps": 100, "maxMemoryGb": 24, "releasedAt": "2023-11-07" },
+
+  { "id": "m3-pro-11c-14g", "family": "M3 Pro", "generation": 3, "tier": "pro", "cpuCores": 11, "cpuPerformanceCores": 5, "cpuEfficiencyCores": 6, "gpuCores": 14, "neuralCores": 16, "memoryBandwidthGBps": 150, "maxMemoryGb": 36, "releasedAt": "2023-11-07" },
+  { "id": "m3-pro-12c-18g", "family": "M3 Pro", "generation": 3, "tier": "pro", "cpuCores": 12, "cpuPerformanceCores": 6, "cpuEfficiencyCores": 6, "gpuCores": 18, "neuralCores": 16, "memoryBandwidthGBps": 150, "maxMemoryGb": 36, "releasedAt": "2023-11-07" },
+
+  { "id": "m3-max-14c-30g", "family": "M3 Max", "generation": 3, "tier": "max", "cpuCores": 14, "cpuPerformanceCores": 10, "cpuEfficiencyCores": 4, "gpuCores": 30, "neuralCores": 16, "memoryBandwidthGBps": 300, "maxMemoryGb": 96,  "releasedAt": "2023-11-07" },
+  { "id": "m3-max-16c-40g", "family": "M3 Max", "generation": 3, "tier": "max", "cpuCores": 16, "cpuPerformanceCores": 12, "cpuEfficiencyCores": 4, "gpuCores": 40, "neuralCores": 16, "memoryBandwidthGBps": 400, "maxMemoryGb": 128, "releasedAt": "2023-11-07" },
+
+  { "id": "m3-ultra-28c-60g", "family": "M3 Ultra", "generation": 3, "tier": "ultra", "cpuCores": 28, "cpuPerformanceCores": 20, "cpuEfficiencyCores": 8,  "gpuCores": 60, "neuralCores": 32, "memoryBandwidthGBps": 800, "maxMemoryGb": 256, "releasedAt": "2025-03-12" },
+  { "id": "m3-ultra-32c-80g", "family": "M3 Ultra", "generation": 3, "tier": "ultra", "cpuCores": 32, "cpuPerformanceCores": 24, "cpuEfficiencyCores": 8,  "gpuCores": 80, "neuralCores": 32, "memoryBandwidthGBps": 800, "maxMemoryGb": 512, "releasedAt": "2025-03-12" },
+
+  { "id": "m4-8c-8g",   "family": "M4", "generation": 4, "tier": "base", "cpuCores": 8,  "cpuPerformanceCores": 4, "cpuEfficiencyCores": 4, "gpuCores": 8,  "neuralCores": 16, "memoryBandwidthGBps": 120, "maxMemoryGb": 32, "releasedAt": "2024-11-08" },
+  { "id": "m4-10c-8g",  "family": "M4", "generation": 4, "tier": "base", "cpuCores": 10, "cpuPerformanceCores": 4, "cpuEfficiencyCores": 6, "gpuCores": 8,  "neuralCores": 16, "memoryBandwidthGBps": 120, "maxMemoryGb": 32, "releasedAt": "2025-03-12" },
+  { "id": "m4-10c-10g", "family": "M4", "generation": 4, "tier": "base", "cpuCores": 10, "cpuPerformanceCores": 4, "cpuEfficiencyCores": 6, "gpuCores": 10, "neuralCores": 16, "memoryBandwidthGBps": 120, "maxMemoryGb": 32, "releasedAt": "2024-11-08" },
+
+  { "id": "m4-pro-12c-16g", "family": "M4 Pro", "generation": 4, "tier": "pro", "cpuCores": 12, "cpuPerformanceCores": 8,  "cpuEfficiencyCores": 4, "gpuCores": 16, "neuralCores": 16, "memoryBandwidthGBps": 273, "maxMemoryGb": 64, "releasedAt": "2024-11-08" },
+  { "id": "m4-pro-14c-20g", "family": "M4 Pro", "generation": 4, "tier": "pro", "cpuCores": 14, "cpuPerformanceCores": 10, "cpuEfficiencyCores": 4, "gpuCores": 20, "neuralCores": 16, "memoryBandwidthGBps": 273, "maxMemoryGb": 64, "releasedAt": "2024-11-08" },
+
+  { "id": "m4-max-14c-32g", "family": "M4 Max", "generation": 4, "tier": "max", "cpuCores": 14, "cpuPerformanceCores": 10, "cpuEfficiencyCores": 4, "gpuCores": 32, "neuralCores": 16, "memoryBandwidthGBps": 410, "maxMemoryGb": 36,  "releasedAt": "2024-11-08" },
+  { "id": "m4-max-16c-40g", "family": "M4 Max", "generation": 4, "tier": "max", "cpuCores": 16, "cpuPerformanceCores": 12, "cpuEfficiencyCores": 4, "gpuCores": 40, "neuralCores": 16, "memoryBandwidthGBps": 546, "maxMemoryGb": 128, "releasedAt": "2024-11-08" }
+]
