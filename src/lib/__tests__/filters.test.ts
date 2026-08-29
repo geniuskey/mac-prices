@@ -137,4 +137,26 @@ describe('URL 직렬화', () => {
   it('잘못된 sort 키는 기본값으로 떨어진다', () => {
     expect(fromQuery('sort=nonsense').sort.key).toBe(DEFAULT_SORT.key)
   })
+
+  it('norm 이 없으면 동일 조건 기본값을 그대로 쓴다', () => {
+    // Number('') === 0 이고 0 은 유한수라, 순진하게 isFinite 로만 거르면
+    // 메모리가 0GB 로 들어간다.
+    const n = fromQuery('').normalize
+    expect(n).toEqual({ on: false, memoryGb: 16, storageGb: 512 })
+  })
+
+  it('망가진 norm 값은 무시하고 기본값으로 떨어진다', () => {
+    for (const q of ['norm=', 'norm=16', 'norm=abc-def', 'norm=0-512', 'norm=16-512-1']) {
+      const n = fromQuery(q).normalize
+      expect(n, q).toEqual({ on: false, memoryGb: 16, storageGb: 512 })
+    }
+  })
+
+  it('정상 norm 값은 그대로 읽는다', () => {
+    expect(fromQuery('norm=32-1024').normalize).toEqual({
+      on: true,
+      memoryGb: 32,
+      storageGb: 1024,
+    })
+  })
 })

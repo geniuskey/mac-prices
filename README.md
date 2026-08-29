@@ -2,7 +2,75 @@
 
 Apple Silicon(M1 이후) Mac 제품들의 한국 가격 비교 사이트.
 
-MacBook Air / MacBook Pro / Mac mini / Mac Studio / iMac / Mac Pro 의
-M1 이후 전 세대를 대상으로, Apple KR 공식 정가를 한 표에서 비교합니다.
+MacBook Air / MacBook Pro / Mac mini / Mac Studio / iMac / Mac Pro 의 한국
+정가(VAT 포함)를 **한 페이지에서** 필터·정렬·비교합니다.
 
-구현 계획: [docs/PLAN.md](docs/PLAN.md)
+## 무엇이 다른가
+
+Apple 스토어에서 가장 하기 어려운 비교가 **"같은 사양으로 맞추면 각각
+얼마인가"** 입니다. 기본 구성의 메모리·저장장치가 모델마다 제각각이라 정가만
+늘어놓으면 비교가 되지 않습니다.
+
+**동일 조건 비교**를 켜면 모든 모델을 지정한 메모리·저장장치로 맞춘 실구매가를
+계산합니다. 기본 구성이 여러 개면 목표 사양까지 가장 싸게 가는 경로를 골라
+`기본가 + BTO 업그레이드 비용` 으로 보여줍니다. 칩 메모리 상한을 넘거나 해당
+업그레이드가 없으면 "구성 불가" 로 표시합니다.
+
+## 기능
+
+- **비교표** — 전 구성을 한 표에. 제품군·칩 세대·티어·화면 크기·최소 사양·
+  가격 상한·판매 상태로 필터, 가격/출시/코어/용량으로 정렬
+- **동일 조건 비교** — 위 설명 참고
+- **행 펼치기** — 페이지 이동 없이 스펙·가격 이력·BTO 구성 계산기 확인
+- **나란히 비교** — 최대 4개를 열로 놓고 항목별 우열 강조, 차이나는 항목만 보기
+- **공유 가능한 링크** — 모든 상태가 URL 에 담김. 새로고침·뒤로가기 모두 동작
+- 다크 모드, 모바일 카드 레이아웃
+
+## 가격 데이터에 대한 경고
+
+**현재 모든 모델의 가격이 `verified: false` 입니다.** 공개 자료를 바탕으로
+채워 넣은 참고값이며 아직 apple.com/kr 과 대조되지 않았습니다. 사이트 상단에
+대조 진행률이 그대로 표시됩니다.
+
+구매 판단에 쓰기 전에 [docs/DATA-ENTRY.md](docs/DATA-ENTRY.md) 의 절차대로
+대조하세요. M5 이후 세대는 한국 정가를 확인하지 못해 아직 들어있지 않습니다.
+
+## 개발
+
+```bash
+npm install
+npm run dev        # 개발 서버
+npm run validate   # 데이터 검증 + 대조가 남은 모델 목록
+npm test           # 가격 계산·필터 로직 단위 테스트
+npm run build      # 정적 사이트를 out/ 에 생성
+```
+
+`npm run validate` 는 스키마·참조 무결성·기본 구성 유일성·가격 이력 순서 등을
+검사합니다. CI 에서 실패하면 머지되지 않습니다.
+
+## 구조
+
+```
+data/
+  chips.json            칩 스펙 (코어 수 바인닝마다 별도 레코드)
+  models/<제품군>/*.json 모델 + 구성(SKU) + BTO 업그레이드 단가
+src/lib/
+  schema.ts             Zod 스키마 — 타입의 단일 출처
+  data.ts               로드 + 검증 + 참조 무결성
+  price.ts              현재가 계산, 동일 조건 정규화 (순수 함수)
+  filters.ts            필터·정렬·URL 직렬화 (순수 함수)
+  useQueryString.ts     URL 을 외부 스토어로 구독
+src/components/         한 페이지 UI
+```
+
+가격 계산은 `src/lib/price.ts` 의 순수 함수에 모여 있고 단위 테스트가
+붙어 있습니다. 이 사이트에서 치명적인 버그는 전부 여기서 납니다.
+
+- 구현 계획: [docs/PLAN.md](docs/PLAN.md)
+- 데이터 입력 가이드: [docs/DATA-ENTRY.md](docs/DATA-ENTRY.md)
+
+## 고지
+
+Apple 과 제휴 관계가 없습니다. Apple, MacBook, Mac mini, Mac Studio, iMac,
+Mac Pro 는 Apple Inc. 의 상표입니다. 가격은 Apple 대한민국 온라인 스토어 정가
+기준이며 실제 판매가와 다를 수 있습니다.

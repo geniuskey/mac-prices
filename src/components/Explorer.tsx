@@ -3,8 +3,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { Model, Row } from '@/lib/types'
 import {
-  DEFAULT_SORT,
-  EMPTY_FILTERS,
   filterRows,
   fromQuery,
   sortRows,
@@ -13,6 +11,7 @@ import {
   type SortKey,
   type SortState,
 } from '@/lib/filters'
+import { useQueryString } from '@/lib/useQueryString'
 import { normalizeRows } from '@/lib/price'
 import FilterBar from './FilterBar'
 import PriceTable from './PriceTable'
@@ -34,16 +33,41 @@ export default function Explorer({
   oldestCheckedAt: string
   verifiedCount: number
 }) {
-  const [filters, setFilters] = useState<FilterState>(EMPTY_FILTERS)
-  const [sort, setSort] = useState<SortState>(DEFAULT_SORT)
-  const [normalize, setNormalize] = useState({
-    on: false,
-    memoryGb: 16,
-    storageGb: 512,
-  })
-  const [selected, setSelected] = useState<string[]>([])
+  // 필터·정렬·동일조건·선택은 전부 URL 이 원본이다. 별도 state 를 두면
+  // 두 벌이 어긋나고, 링크를 붙여넣었을 때 화면과 주소가 따로 논다.
+  const [search, setSearch] = useQueryString()
+  const { filters, sort, normalize, selected } = useMemo(
+    () => fromQuery(search),
+    [search],
+  )
+
+  const commit = useCallback(
+    (next: {
+      filters?: FilterState
+      sort?: SortState
+      normalize?: { on: boolean; memoryGb: number; storageGb: number }
+      selected?: string[]
+    }) => {
+      setSearch(
+        toQuery(
+          next.filters ?? filters,
+          next.sort ?? sort,
+          next.normalize ?? normalize,
+          next.selected ?? selected,
+        ),
+      )
+    },
+    [setSearch, filters, sort, normalize, selected],
+  )
+
+  const setFilters = useCallback(
+    (f: FilterState) => commit({ filters: f }),
+    [commit],
+  )
+  const setSort = useCallback((s: SortState) => commit({ sort: s }), [commit])
+
+  // 상세 펼침은 링크로 공유할 만한 상태가 아니라 로컬로 둔다.
   const [expandedId, setExpandedId] = useState<string | null>(null)
-  const [hydrated, setHydrated] = useState(false)
   const stickyRef = useRef<HTMLDivElement>(null)
 
   // 표 헤더도 sticky 라서, 위에 고정된 필터 영역의 실제 높이만큼 내려야 한다.
@@ -61,24 +85,6 @@ export default function Explorer({
     ro.observe(el)
     return () => ro.disconnect()
   }, [])
-
-  // 첫 렌더 뒤 URL 에서 상태를 복원한다. 정적 배포라 서버는 쿼리를 못 본다.
-  useEffect(() => {
-    const parsed = fromQuery(window.location.search)
-    setFilters(parsed.filters)
-    setSort(parsed.sort)
-    setNormalize(parsed.normalize)
-    setSelected(parsed.selected)
-    setHydrated(true)
-  }, [])
-
-  // 상태가 바뀔 때마다 공유 가능한 링크로 되돌려 쓴다.
-  useEffect(() => {
-    if (!hydrated) return
-    const q = toQuery(filters, sort, normalize, selected)
-    const url = q ? `${window.location.pathname}?${q}` : window.location.pathname
-    window.history.replaceState(null, '', url)
-  }, [hydrated, filters, sort, normalize, selected])
 
   const models = useMemo(
     () => new Map(modelList.map((m) => [m.id, m])),
@@ -130,24 +136,67 @@ export default function Explorer({
     [selected, baseRows],
   )
 
-  const onSort = useCallback((key: SortKey) => {
-    setSort((s) =>
-      s.key === key
-        ? { key, dir: s.dir === 'asc' ? 'desc' : 'asc' }
-        : // 이름은 오름차순, 나머지 수치는 큰 값부터 보는 게 자연스럽다.
-          { key, dir: key === 'name' || key === 'price' ? 'asc' : 'desc' },
-    )
-  }, [])
+  const onSort = useCallback(
+    (key: SortKey) => {
+      commit({
+        sort:
+          sort.key === key
+            ? { key, dir: sort.dir === 'asc' ? 'desc' : 'asc' }
+            : // 이름·가격은 오름차순, 나머지 수치는 큰 값부터가 자연스럽다.
+              { key, dir: key === 'name' || key === 'price' ? 'asc' : 'desc' },
+      })
+    },
+    [commit, sort],
+  )
 
-  const onToggleSelect = useCallback((id: string) => {
-    setSelected((prev) =>
-      prev.includes(id)
-        ? prev.filter((v) => v !== id)
-        : prev.length >= MAX_COMPARE
-          ? prev
-          : [...prev, id],
-    )
-  }, [])
+  /**
+   * 동일 조건 비교를 켜고 끌 때 선택을 옮긴다.
+   * 두 모드는 행 id 체계가 다르다 (구성 단위 vs 모델·칩 단위). 그대로 두면
+   * 비교함에 담아둔 제품이 토글 한 번에 말없이 사라진다.
+   */
+  const onToggleNormalize = useCallback(() => {
+    const nextNormalize = { ...normalize, on: !normalize.on }
+    const keyOf = (r: Row) =>
+      `${r.modelId}--${r.chip.id}--${r.variantLabel ?? ''}`
+
+    const keys = selected
+      .map((id) => baseRows.find((r) => r.id === id))
+      .filter((r): r is Row => r !== undefined)
+      .map(keyOf)
+
+    const nextRows = nextNormalize.on
+      ? normalizeRows(
+          allRows,
+          modelList,
+          {
+            memoryGb: nextNormalize.memoryGb,
+            storageGb: nextNormalize.storageGb,
+          },
+          asOf,
+        )
+      : allRows
+
+    const nextSelected = keys
+      .map((key) => {
+        const matches = nextRows.filter((r) => keyOf(r) === key)
+        // 구성 단위로 돌아갈 때는 기본 구성을 대표로 삼는다.
+        return (matches.find((r) => r.isBaseConfig) ?? matches[0])?.id
+      })
+      .filter((id): id is string => id !== undefined)
+
+    commit({ normalize: nextNormalize, selected: nextSelected })
+  }, [commit, normalize, selected, baseRows, allRows, modelList, asOf])
+
+  const onToggleSelect = useCallback(
+    (id: string) => {
+      if (selected.includes(id)) {
+        commit({ selected: selected.filter((v) => v !== id) })
+      } else if (selected.length < MAX_COMPARE) {
+        commit({ selected: [...selected, id] })
+      }
+    },
+    [commit, selected],
+  )
 
   const unverified = modelList.length - verifiedCount
 
@@ -203,7 +252,7 @@ export default function Explorer({
         <div className="mx-auto flex max-w-[1400px] flex-wrap items-center gap-x-3 gap-y-2 px-3 py-2.5 sm:px-5">
           <Toggle
             active={normalize.on}
-            onClick={() => setNormalize((n) => ({ ...n, on: !n.on }))}
+            onClick={onToggleNormalize}
           >
             {normalize.on ? '✓ 동일 조건 비교' : '동일 조건 비교'}
           </Toggle>
@@ -216,7 +265,7 @@ export default function Explorer({
                   ariaLabel="동일 조건 메모리"
                   value={String(normalize.memoryGb)}
                   onChange={(v) =>
-                    setNormalize((n) => ({ ...n, memoryGb: Number(v) }))
+                    commit({ normalize: { ...normalize, memoryGb: Number(v) } })
                   }
                   options={NORM_MEMORY.map((m) => ({
                     value: String(m),
@@ -230,7 +279,7 @@ export default function Explorer({
                   ariaLabel="동일 조건 저장장치"
                   value={String(normalize.storageGb)}
                   onChange={(v) =>
-                    setNormalize((n) => ({ ...n, storageGb: Number(v) }))
+                    commit({ normalize: { ...normalize, storageGb: Number(v) } })
                   }
                   options={NORM_STORAGE.map((s) => ({
                     value: String(s),
@@ -289,8 +338,8 @@ export default function Explorer({
 
       <CompareTray
         rows={selectedRows}
-        onRemove={(id) => setSelected((prev) => prev.filter((v) => v !== id))}
-        onClear={() => setSelected([])}
+        onRemove={(id) => commit({ selected: selected.filter((v) => v !== id) })}
+        onClear={() => commit({ selected: [] })}
       />
     </>
   )

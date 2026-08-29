@@ -197,8 +197,16 @@ export function fromQuery(
 
   const sortKey = p.get('sort') as SortKey | null
   const status = p.get('status')
+
+  // norm 은 "16-512" 꼴. 빈 문자열은 Number('') === 0 이고 0 은 유한수라서,
+  // isFinite 만으로 거르면 파라미터가 없을 때 메모리가 0GB 로 들어간다.
   const norm = p.get('norm')
-  const [nm, ns] = (norm ?? '').split('-').map(Number)
+  const normParts = (norm ?? '').split('-').map(Number)
+  const normValid =
+    norm !== null &&
+    normParts.length === 2 &&
+    normParts.every((n) => Number.isFinite(n) && n > 0)
+  const [nm, ns] = normParts
 
   return {
     filters: {
@@ -219,9 +227,9 @@ export function fromQuery(
       dir: p.get('dir') === 'desc' ? 'desc' : 'asc',
     },
     normalize: {
-      on: Boolean(norm) && Number.isFinite(nm) && Number.isFinite(ns),
-      memoryGb: Number.isFinite(nm) ? nm : fallbackNormalize.memoryGb,
-      storageGb: Number.isFinite(ns) ? ns : fallbackNormalize.storageGb,
+      on: normValid,
+      memoryGb: normValid ? nm : fallbackNormalize.memoryGb,
+      storageGb: normValid ? ns : fallbackNormalize.storageGb,
     },
     selected: strs('pick'),
   }
