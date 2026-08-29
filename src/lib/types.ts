@@ -23,6 +23,8 @@ export interface Row {
   variantLabel?: string
   priceKrw: number
   priceEffectiveFrom: string
+  /** 현재 적용 중인 금액이 확인값이 아니라 추정치인가 */
+  priceEstimated: boolean
   priceHistory: PriceSnapshot[]
   educationKrw?: number
   releasedAt: string
@@ -50,6 +52,8 @@ export interface NormalizeResult {
   krw: number | null
   /** 기준이 된 기본 구성의 가격 */
   baseKrw: number
+  /** 기준으로 삼은 기본 구성의 가격이 추정치인가 */
+  baseEstimated: boolean
   upgradeKrw: number
   /** 사용자에게 보여줄 사유 (불가능하거나 업그레이드가 필요할 때) */
   note: string

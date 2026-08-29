@@ -24,6 +24,13 @@
         {
           "krw": 2090000,
           "effectiveFrom": "2024-11-08"
+        },
+        {
+          "krw": 2790000,
+          "effectiveFrom": "2026-06-25",
+          "source": "apple-kr",
+          "note": "전 라인 인상. 보도는 최저가 구성만 다뤄, 기본 구성과 같은 인상 폭을 적용한 추정치",
+          "estimated": true
         }
       ]
     },
@@ -36,6 +43,13 @@
         {
           "krw": 2490000,
           "effectiveFrom": "2024-11-08"
+        },
+        {
+          "krw": 3190000,
+          "effectiveFrom": "2026-06-25",
+          "source": "apple-kr",
+          "note": "전 라인 인상. 보도는 최저가 구성만 다뤄, 기본 구성과 같은 인상 폭을 적용한 추정치",
+          "estimated": true
         }
       ]
     }

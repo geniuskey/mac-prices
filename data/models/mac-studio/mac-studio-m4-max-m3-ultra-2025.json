@@ -25,6 +25,12 @@
         {
           "krw": 3290000,
           "effectiveFrom": "2025-03-12"
+        },
+        {
+          "krw": 4290000,
+          "effectiveFrom": "2026-06-25",
+          "source": "apple-kr",
+          "note": "메모리 가격 급등에 따른 전 라인 인상"
         }
       ]
     },
@@ -35,8 +41,15 @@
       "isBaseConfig": false,
       "prices": [
         {
-          "krw": 3990000,
+          "krw": 4040000,
           "effectiveFrom": "2025-03-12"
+        },
+        {
+          "krw": 5040000,
+          "effectiveFrom": "2026-06-25",
+          "source": "apple-kr",
+          "note": "전 라인 인상. 보도는 최저가 구성만 다뤄, 기본 구성과 같은 인상 폭을 적용한 추정치",
+          "estimated": true
         }
       ]
     },
@@ -49,6 +62,33 @@
         {
           "krw": 6590000,
           "effectiveFrom": "2025-03-12"
+        },
+        {
+          "krw": 7590000,
+          "effectiveFrom": "2026-06-25",
+          "source": "apple-kr",
+          "note": "전 라인 인상. 보도는 최저가 구성만 다뤄, 기본 구성과 같은 인상 폭을 적용한 추정치",
+          "estimated": true
+        }
+      ]
+    },
+    {
+      "chipId": "m3-ultra-32c-80g",
+      "memoryGb": 96,
+      "storageGb": 1024,
+      "isBaseConfig": false,
+      "prices": [
+        {
+          "krw": 8840000,
+          "effectiveFrom": "2025-03-12",
+          "source": "apple-kr"
+        },
+        {
+          "krw": 9840000,
+          "effectiveFrom": "2026-06-25",
+          "source": "apple-kr",
+          "note": "전 라인 인상. 보도는 최저가 구성만 다뤄, 기본 구성과 같은 인상 폭을 적용한 추정치",
+          "estimated": true
         }
       ]
     }

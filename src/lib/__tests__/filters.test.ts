@@ -29,6 +29,7 @@ function row(over: Partial<Row> & { id: string }): Row {
     isBaseConfig: true,
     priceKrw: 1590000,
     priceEffectiveFrom: '2025-03-12',
+    priceEstimated: false,
     priceHistory: [],
     releasedAt: '2025-03-12',
     discontinuedAt: null,
@@ -101,7 +102,7 @@ describe('sortRows', () => {
       row({
         id: 'bad',
         priceKrw: 1,
-        normalized: { feasible: false, krw: null, baseKrw: 0, upgradeKrw: 0, note: '' },
+        normalized: { feasible: false, krw: null, baseKrw: 0, baseEstimated: false, upgradeKrw: 0, note: '' },
       }),
       row({ id: 'ok', priceKrw: 999 }),
     ]

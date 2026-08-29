@@ -34,6 +34,13 @@ if (unverified.length) {
   for (const m of unverified) console.log(`    · ${m.id}`)
 }
 
+const estimated = rows.filter((r) => r.priceEstimated)
+if (estimated.length) {
+  console.log(`\n현재가가 추정치인 구성 ${estimated.length}/${rows.length}`)
+  console.log(`  2026-06-25 전 라인 인상 때 최저가 구성만 보도되어,`)
+  console.log(`  파생 구성은 같은 인상 폭을 적용한 추정치다.`)
+}
+
 console.log(`\nBTO 업그레이드 단가 대조 ${models.length - noUpgrades.length}/${models.length}`)
 if (noUpgrades.length) {
   console.log(

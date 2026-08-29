@@ -201,6 +201,7 @@ export default function Explorer({
   )
 
   const unverified = modelList.length - verifiedCount
+  const estimatedCount = allRows.filter((r) => r.priceEstimated).length
 
   return (
     <>
@@ -231,6 +232,12 @@ export default function Explorer({
             {' — '}
             대조된 가격은 언론 보도 기준이며 apple.com/kr 직접 확인은 아닙니다.
             {unverified > 0 && ` 아직 ${unverified}개 모델은 대조 전입니다.`}
+            <br />
+            <strong>현재가가 추정치인 구성 {estimatedCount}/{allRows.length}</strong>
+            {' — '}
+            2026년 6월 25일 Apple 이 맥 전 라인 가격을 올렸는데 보도는 각
+            제품군의 최저가 구성만 다뤘습니다. 파생 구성은 같은 인상 폭을 적용한
+            추정치이며 <b>추정</b> 표시가 붙습니다.
             <br />
             <strong>
               BTO 업그레이드 단가 대조 {upgradesVerifiedCount}/{modelList.length}

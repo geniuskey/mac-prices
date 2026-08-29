@@ -61,6 +61,15 @@ export const priceSnapshotSchema = z.object({
   effectiveFrom: isoDate,
   source: z.string().default('apple-kr'),
   note: z.string().optional(),
+  /**
+   * 이 금액이 확인된 값이 아니라 추정치인가.
+   *
+   * 2026-06-25 애플이 맥 전 라인 가격을 올렸는데, 보도는 각 제품군의 최저가
+   * 구성만 다룬다. 파생 구성까지 같은 인상 폭을 적용해 채우지 않으면 상위
+   * 구성이 기본 구성보다 싸 보이는 엉터리 표가 된다. 그렇다고 확인된 값과
+   * 섞어버리면 안 되므로 따로 표시한다.
+   */
+  estimated: z.boolean().optional(),
 })
 export type PriceSnapshot = z.infer<typeof priceSnapshotSchema>
 

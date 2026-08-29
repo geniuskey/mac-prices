@@ -243,6 +243,15 @@ export default function PriceTable({
                       <>
                         <div className="tnum font-semibold whitespace-nowrap">
                           {formatKrw(row.priceKrw)}
+                          {row.priceEstimated && (
+                            <span
+                              className="ml-1 align-middle text-[10px] font-medium"
+                              style={{ color: 'var(--warn)' }}
+                              title="확인된 값이 아니라 추정치입니다"
+                            >
+                              추정
+                            </span>
+                          )}
                         </div>
                         {/* 가격 게이지 — 가격 외 기준으로 정렬했을 때
                             비싼 쪽인지 싼 쪽인지 훑어보게 해준다. 레일을 깔아야
