@@ -496,5 +496,41 @@
   "memoryBandwidthGBps": 170,
   "maxMemoryGb": 32,
   "releasedAt": "2026-09-22"
+ },
+ {
+  "id": "m5-pro-15c-16g",
+  "family": "M5 Pro",
+  "generation": 5,
+  "tier": "pro",
+  "cpuCores": 15,
+  "gpuCores": 16,
+  "neuralCores": 16,
+  "memoryBandwidthGBps": 307,
+  "maxMemoryGb": 64,
+  "releasedAt": "2026-09-22"
+ },
+ {
+  "id": "m5-max-18c-32g",
+  "family": "M5 Max",
+  "generation": 5,
+  "tier": "max",
+  "cpuCores": 18,
+  "gpuCores": 32,
+  "neuralCores": 16,
+  "memoryBandwidthGBps": 614,
+  "maxMemoryGb": 36,
+  "releasedAt": "2026-09-22"
+ },
+ {
+  "id": "m5-ultra-30c-64g",
+  "family": "M5 Ultra",
+  "generation": 5,
+  "tier": "ultra",
+  "cpuCores": 30,
+  "gpuCores": 64,
+  "neuralCores": 32,
+  "memoryBandwidthGBps": 1228,
+  "maxMemoryGb": 512,
+  "releasedAt": "2026-09-22"
  }
 ]

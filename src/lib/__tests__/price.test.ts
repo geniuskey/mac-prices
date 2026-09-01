@@ -66,6 +66,49 @@ describe('priceAt', () => {
   })
 })
 
+describe('추정 가격 전파', () => {
+  const raised: Model = {
+    ...model,
+    configs: [
+      {
+        ...model.configs[0],
+        prices: [
+          { krw: 890000, effectiveFrom: '2024-11-08', source: 'apple-kr' },
+          {
+            krw: 1349000,
+            effectiveFrom: '2026-06-25',
+            source: 'apple-kr',
+            estimated: true,
+          },
+        ],
+      },
+    ],
+  }
+
+  it('인상 전 시점에는 확인된 값이 쓰이고 추정 표시가 붙지 않는다', () => {
+    const p = priceAt(raised.configs[0].prices, '2026-01-01')
+    expect(p.krw).toBe(890000)
+    expect(p.estimated).toBeUndefined()
+  })
+
+  it('인상 후에는 추정 표시가 남는다', () => {
+    const p = priceAt(raised.configs[0].prices, '2026-08-29')
+    expect(p.krw).toBe(1349000)
+    expect(p.estimated).toBe(true)
+  })
+
+  it('동일 조건 비교 결과가 기준 구성의 추정 여부를 물려받는다', () => {
+    const r = normalizeModel(
+      raised,
+      chip,
+      { memoryGb: 16, storageGb: 256 },
+      '2026-08-29',
+    )
+    expect(r.krw).toBe(1349000)
+    expect(r.baseEstimated).toBe(true)
+  })
+})
+
 describe('normalizeModel', () => {
   const asOf = '2026-08-29'
 

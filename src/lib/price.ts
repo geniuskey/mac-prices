@@ -47,6 +47,7 @@ export function buildRows(
         variantLabel: config.variantLabel,
         priceKrw: price.krw,
         priceEffectiveFrom: price.effectiveFrom,
+        priceEstimated: price.estimated === true,
         priceHistory: config.prices,
         educationKrw: config.educationKrw,
         releasedAt: model.releasedAt,
@@ -110,6 +111,7 @@ export function normalizeModel(
       feasible: false,
       krw: null,
       baseKrw: 0,
+      baseEstimated: false,
       upgradeKrw: 0,
       note: `${chip.family} 는 최대 ${chip.maxMemoryGb}GB 까지만 지원합니다`,
     }
@@ -139,7 +141,8 @@ export function normalizeModel(
     )
     if (mem === null || sto === null) continue
 
-    const baseKrw = priceAt(config.prices, asOf).krw
+    const basePrice = priceAt(config.prices, asOf)
+    const baseKrw = basePrice.krw
     const upgradeKrw = mem + sto
     const total = baseKrw + upgradeKrw
     if (best === null || total < best.krw!) {
@@ -151,6 +154,7 @@ export function normalizeModel(
         feasible: true,
         krw: total,
         baseKrw,
+        baseEstimated: basePrice.estimated === true,
         upgradeKrw,
         note: parts.length ? `${parts.join(', ')} 업그레이드 포함` : '기본 구성 그대로',
       }
@@ -162,6 +166,7 @@ export function normalizeModel(
     feasible: false,
     krw: null,
     baseKrw: 0,
+    baseEstimated: false,
     upgradeKrw: 0,
     note: sawConfig
       ? '해당 사양으로 구성할 수 없습니다 (업그레이드 옵션 없음)'
@@ -203,6 +208,7 @@ export function normalizeRows(
       memoryGb: target.memoryGb,
       storageGb: target.storageGb,
       priceKrw: normalized.krw ?? row.priceKrw,
+      priceEstimated: normalized.baseEstimated ?? row.priceEstimated,
       normalized,
     })
   }

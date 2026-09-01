@@ -30,6 +30,12 @@
         {
           "krw": 1990000,
           "effectiveFrom": "2024-11-08"
+        },
+        {
+          "krw": 2490000,
+          "effectiveFrom": "2026-06-25",
+          "source": "apple-kr",
+          "note": "메모리 가격 급등에 따른 전 라인 인상"
         }
       ]
     },
@@ -43,6 +49,13 @@
         {
           "krw": 2290000,
           "effectiveFrom": "2024-11-08"
+        },
+        {
+          "krw": 2790000,
+          "effectiveFrom": "2026-06-25",
+          "source": "apple-kr",
+          "note": "전 라인 인상. 보도는 최저가 구성만 다뤄, 기본 구성과 같은 인상 폭을 적용한 추정치",
+          "estimated": true
         }
       ]
     },
@@ -56,6 +69,13 @@
         {
           "krw": 2540000,
           "effectiveFrom": "2024-11-08"
+        },
+        {
+          "krw": 3040000,
+          "effectiveFrom": "2026-06-25",
+          "source": "apple-kr",
+          "note": "전 라인 인상. 보도는 최저가 구성만 다뤄, 기본 구성과 같은 인상 폭을 적용한 추정치",
+          "estimated": true
         }
       ]
     }

@@ -71,6 +71,14 @@ export default function RowCard({
             ) : (
               <span className="tnum ml-auto text-[16px] font-bold">
                 {formatKrw(row.priceKrw)}
+                {row.priceEstimated && (
+                  <span
+                    className="ml-1 align-middle text-[10px] font-medium"
+                    style={{ color: 'var(--warn)' }}
+                  >
+                    추정
+                  </span>
+                )}
               </span>
             )}
           </div>

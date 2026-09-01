@@ -193,20 +193,32 @@ export default function RowDetail({ row, model }: { row: Row; model: Model }) {
               const prev = i > 0 ? row.priceHistory[i - 1].krw : null
               const diff = prev === null ? null : h.krw - prev
               return (
-                <li key={h.effectiveFrom} className="flex justify-between gap-2">
-                  <span style={{ color: 'var(--muted)' }}>{h.effectiveFrom}</span>
-                  <span className="tnum">
-                    {formatKrw(h.krw)}
-                    {diff !== null && (
-                      <span
-                        className="ml-1"
-                        style={{ color: diff > 0 ? 'var(--danger)' : 'var(--accent)' }}
-                      >
-                        {diff > 0 ? '▲' : '▼'}
-                        {Math.abs(diff / 10000).toLocaleString('ko-KR')}만
-                      </span>
-                    )}
-                  </span>
+                <li key={h.effectiveFrom}>
+                  <div className="flex justify-between gap-2">
+                    <span style={{ color: 'var(--muted)' }}>{h.effectiveFrom}</span>
+                    <span className="tnum">
+                      {formatKrw(h.krw)}
+                      {h.estimated && (
+                        <span className="ml-1 text-[11px]" style={{ color: 'var(--warn)' }}>
+                          추정
+                        </span>
+                      )}
+                      {diff !== null && (
+                        <span
+                          className="ml-1"
+                          style={{ color: diff > 0 ? 'var(--danger)' : 'var(--accent)' }}
+                        >
+                          {diff > 0 ? '▲' : '▼'}
+                          {Math.abs(diff / 10000).toLocaleString('ko-KR')}만
+                        </span>
+                      )}
+                    </span>
+                  </div>
+                  {h.note && (
+                    <div className="mt-0.5 text-[11px]" style={{ color: 'var(--muted)' }}>
+                      {h.note}
+                    </div>
+                  )}
                 </li>
               )
             })}
@@ -223,6 +235,7 @@ export default function RowDetail({ row, model }: { row: Row; model: Model }) {
               <Badge>단종 {row.discontinuedAt}</Badge>
             )}
             <VerifyBadge verified={row.verified} source={row.verifiedSource} />
+            {row.priceEstimated && <Badge tone="warn">현재가 추정</Badge>}
             {!row.upgradesVerified && <Badge tone="warn">업그레이드가 추정</Badge>}
           </div>
           <div style={{ color: 'var(--muted)' }}>
