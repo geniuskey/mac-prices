@@ -1,6 +1,13 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import {
+  useCallback,
+  useDeferredValue,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import type { Model, Row } from '@/lib/types'
 import {
   filterRows,
@@ -43,6 +50,11 @@ export default function Explorer({
     [search],
   )
 
+  const stateRef = useRef({ filters, sort, normalize, selected })
+  useEffect(() => {
+    stateRef.current = { filters, sort, normalize, selected }
+  }, [filters, sort, normalize, selected])
+
   const commit = useCallback(
     (next: {
       filters?: FilterState
@@ -50,16 +62,17 @@ export default function Explorer({
       normalize?: { on: boolean; memoryGb: number; storageGb: number }
       selected?: string[]
     }) => {
+      const current = stateRef.current
       setSearch(
         toQuery(
-          next.filters ?? filters,
-          next.sort ?? sort,
-          next.normalize ?? normalize,
-          next.selected ?? selected,
+          next.filters ?? current.filters,
+          next.sort ?? current.sort,
+          next.normalize ?? current.normalize,
+          next.selected ?? current.selected,
         ),
       )
     },
-    [setSearch, filters, sort, normalize, selected],
+    [setSearch],
   )
 
   const setFilters = useCallback(
@@ -109,9 +122,19 @@ export default function Explorer({
     [allRows, modelList, normalize, asOf],
   )
 
+  // 슬라이더를 움직이거나 검색어를 입력하는 동안 표 전체를 매 키 입력마다
+  // 다시 그리면 입력 이벤트가 긴 작업에 막힌다. 컨트롤 값은 즉시 반영하고,
+  // 결과 표 계산은 React 가 한가할 때 최신 필터로 따라가게 한다.
+  const deferredFilters = useDeferredValue(filters)
+  const sortKey = sort.key
+  const sortDir = sort.dir
+  const stableSort = useMemo(
+    () => ({ key: sortKey, dir: sortDir }),
+    [sortKey, sortDir],
+  )
   const visibleRows = useMemo(
-    () => sortRows(filterRows(baseRows, filters), sort),
-    [baseRows, filters, sort],
+    () => sortRows(filterRows(baseRows, deferredFilters), stableSort),
+    [baseRows, deferredFilters, stableSort],
   )
 
   const generations = useMemo(
@@ -173,15 +196,16 @@ export default function Explorer({
 
   const onSort = useCallback(
     (key: SortKey) => {
+      const currentSort = stateRef.current.sort
       commit({
         sort:
-          sort.key === key
-            ? { key, dir: sort.dir === 'asc' ? 'desc' : 'asc' }
+          currentSort.key === key
+            ? { key, dir: currentSort.dir === 'asc' ? 'desc' : 'asc' }
             : // 이름·가격은 오름차순, 나머지 수치는 큰 값부터가 자연스럽다.
               { key, dir: key === 'name' || key === 'price' ? 'asc' : 'desc' },
       })
     },
-    [commit, sort],
+    [commit],
   )
 
   /**
@@ -224,14 +248,17 @@ export default function Explorer({
 
   const onToggleSelect = useCallback(
     (id: string) => {
-      if (selected.includes(id)) {
-        commit({ selected: selected.filter((v) => v !== id) })
-      } else if (selected.length < MAX_COMPARE) {
-        commit({ selected: [...selected, id] })
+      const currentSelected = stateRef.current.selected
+      if (currentSelected.includes(id)) {
+        commit({ selected: currentSelected.filter((v) => v !== id) })
+      } else if (currentSelected.length < MAX_COMPARE) {
+        commit({ selected: [...currentSelected, id] })
       }
     },
-    [commit, selected],
+    [commit],
   )
+
+  const selectedSet = useMemo(() => new Set(selected), [selected])
 
   const unverified = modelList.length - verifiedCount
   const estimatedCount = allRows.filter((r) => r.priceEstimated).length
@@ -373,10 +400,10 @@ export default function Explorer({
             <PriceTable
               rows={visibleRows}
               models={models}
-              sort={sort}
+              sort={stableSort}
               onSort={onSort}
               onSetSort={setSort}
-              selected={new Set(selected)}
+              selected={selectedSet}
               onToggleSelect={onToggleSelect}
               expandedId={expandedId}
               onExpand={setExpandedId}

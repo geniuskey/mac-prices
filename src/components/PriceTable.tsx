@@ -1,6 +1,6 @@
 'use client'
 
-import { Fragment } from 'react'
+import { Fragment, memo, useSyncExternalStore } from 'react'
 import type { Model, Row } from '@/lib/types'
 import type { SortKey, SortState } from '@/lib/filters'
 import { formatKrw, formatKrwShort, formatStorage } from '@/lib/price'
@@ -31,7 +31,23 @@ function hideClass(hide?: 'md' | 'lg') {
   return ''
 }
 
-export default function PriceTable({
+const WIDE_QUERY = '(min-width: 640px)'
+
+function subscribeToWideViewport(onChange: () => void) {
+  const media = window.matchMedia(WIDE_QUERY)
+  media.addEventListener('change', onChange)
+  return () => media.removeEventListener('change', onChange)
+}
+
+function getWideViewportSnapshot() {
+  return window.matchMedia(WIDE_QUERY).matches
+}
+
+function getServerViewportSnapshot() {
+  return false
+}
+
+function PriceTable({
   rows,
   models,
   sort,
@@ -56,6 +72,12 @@ export default function PriceTable({
   onExpand: (id: string | null) => void
   normalizeOn: boolean
 }) {
+  const isWideViewport = useSyncExternalStore(
+    subscribeToWideViewport,
+    getWideViewportSnapshot,
+    getServerViewportSnapshot,
+  )
+
   // 가격 막대의 기준. 구성 불가능한 행은 제외해야 막대가 찌그러지지 않는다.
   const maxPrice = Math.max(
     1,
@@ -76,7 +98,8 @@ export default function PriceTable({
   return (
     <div className="mx-auto max-w-[1400px] px-0 sm:px-5">
       {/* 좁은 화면: 정렬 셀렉트 + 카드 목록 (표 헤더를 누를 자리가 없다) */}
-      <div className="sm:hidden">
+      {!isWideViewport && (
+        <div>
         <div
           className="flex items-center gap-2 border-b px-3 py-2"
           style={{ borderColor: 'var(--border)' }}
@@ -114,9 +137,10 @@ export default function PriceTable({
             normalizeOn={normalizeOn}
           />
         ))}
-      </div>
+        </div>
+      )}
 
-      <table className="hidden w-full border-collapse text-[13px] sm:table">
+      {isWideViewport && <table className="w-full border-collapse text-[13px]">
         <thead>
           <tr
             className="sticky z-20"
@@ -338,7 +362,9 @@ export default function PriceTable({
             )
           })}
         </tbody>
-      </table>
+      </table>}
     </div>
   )
 }
+
+export default memo(PriceTable)

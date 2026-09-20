@@ -1,10 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { FAMILIES, FAMILY_LABEL, TIERS, TIER_LABEL } from '@/lib/schema'
 import type { Family, Tier } from '@/lib/types'
-import type { FilterState } from '@/lib/filters'
-import { isFiltered } from '@/lib/filters'
+import { EMPTY_FILTERS, isFiltered, type FilterState } from '@/lib/filters'
 import { FieldLabel, RangeSlider, Toggle } from './ui'
 
 function toggleIn<T>(list: T[], value: T): T[] {
@@ -48,6 +47,23 @@ function selectedRange(
   return { lower, upper }
 }
 
+function sameFilters(a: FilterState, b: FilterState) {
+  return (
+    a.q === b.q &&
+    a.families.join(',') === b.families.join(',') &&
+    a.generations.join(',') === b.generations.join(',') &&
+    a.tiers.join(',') === b.tiers.join(',') &&
+    a.sizes.join(',') === b.sizes.join(',') &&
+    a.minMemoryGb === b.minMemoryGb &&
+    a.maxMemoryGb === b.maxMemoryGb &&
+    a.minStorageGb === b.minStorageGb &&
+    a.maxStorageGb === b.maxStorageGb &&
+    a.minKrw === b.minKrw &&
+    a.maxKrw === b.maxKrw &&
+    a.status === b.status
+  )
+}
+
 export default function FilterBar({
   filters,
   onChange,
@@ -66,19 +82,69 @@ export default function FilterBar({
   ranges: FilterRanges
 }) {
   const [open, setOpen] = useState(false)
-  const set = (patch: Partial<FilterState>) => onChange({ ...filters, ...patch })
+  const [draftFilters, setDraftFilters] = useState(filters)
+  const draftRef = useRef(filters)
+  const pendingRef = useRef<FilterState | null>(null)
+  const timerRef = useRef<number | null>(null)
+
+  // URL·뒤로가기·초기화처럼 부모에서 들어온 변경은 로컬 초안을 덮어쓴다.
+  // 사용자가 방금 조작한 초안은 부모 URL이 따라올 때까지 보존한다.
+  useEffect(() => {
+    const pending = pendingRef.current
+    if (pending && !sameFilters(filters, pending)) {
+      pendingRef.current = null
+      if (timerRef.current !== null) window.clearTimeout(timerRef.current)
+      timerRef.current = null
+    }
+
+    if (!pendingRef.current) {
+      draftRef.current = filters
+      setDraftFilters(filters)
+    }
+  }, [filters])
+
+  useEffect(
+    () => () => {
+      if (timerRef.current !== null) window.clearTimeout(timerRef.current)
+    },
+    [],
+  )
+
+  const schedule = (patch: Partial<FilterState>) => {
+    const next = { ...draftRef.current, ...patch }
+    draftRef.current = next
+    pendingRef.current = next
+    setDraftFilters(next)
+
+    if (timerRef.current !== null) window.clearTimeout(timerRef.current)
+    timerRef.current = window.setTimeout(() => {
+      const pending = pendingRef.current
+      pendingRef.current = null
+      timerRef.current = null
+      if (pending) onChange(pending)
+    }, 140)
+  }
+
+  const reset = () => {
+    if (timerRef.current !== null) window.clearTimeout(timerRef.current)
+    timerRef.current = null
+    pendingRef.current = null
+    draftRef.current = EMPTY_FILTERS
+    setDraftFilters(EMPTY_FILTERS)
+    onChange(EMPTY_FILTERS)
+  }
 
   const memory = selectedRange(
     ranges.memory,
-    filters.minMemoryGb,
-    filters.maxMemoryGb,
+    draftFilters.minMemoryGb,
+    draftFilters.maxMemoryGb,
   )
   const storage = selectedRange(
     ranges.storage,
-    filters.minStorageGb,
-    filters.maxStorageGb,
+    draftFilters.minStorageGb,
+    draftFilters.maxStorageGb,
   )
-  const price = selectedRange(ranges.price, filters.minKrw, filters.maxKrw)
+  const price = selectedRange(ranges.price, draftFilters.minKrw, draftFilters.maxKrw)
 
   const storageLabel = (gb: number) =>
     gb >= 1024 ? `${gb / 1024}TB` : `${gb}GB`
@@ -93,8 +159,8 @@ export default function FilterBar({
         <div className="flex flex-wrap items-center gap-2">
           <input
             type="search"
-            value={filters.q}
-            onChange={(e) => set({ q: e.target.value })}
+            value={draftFilters.q}
+            onChange={(e) => schedule({ q: e.target.value })}
             placeholder="모델·칩 검색"
             aria-label="모델 검색"
             className="w-full min-w-0 rounded-md border px-2.5 py-1.5 text-[13px] outline-none sm:flex-1 lg:flex-none"
@@ -114,8 +180,8 @@ export default function FilterBar({
             ).map(([v, label]) => (
               <Toggle
                 key={v}
-                active={filters.status === v}
-                onClick={() => set({ status: v })}
+                active={draftFilters.status === v}
+                onClick={() => schedule({ status: v })}
               >
                 {label}
               </Toggle>
@@ -129,25 +195,10 @@ export default function FilterBar({
           </span>
 
           <div className="ml-auto flex items-center gap-2">
-            {isFiltered(filters) && (
+            {isFiltered(draftFilters) && (
               <button
                 type="button"
-                onClick={() =>
-                  onChange({
-                    q: '',
-                    families: [],
-                    generations: [],
-                    tiers: [],
-                    sizes: [],
-                    minMemoryGb: null,
-                    maxMemoryGb: null,
-                    minStorageGb: null,
-                    maxStorageGb: null,
-                    minKrw: null,
-                    maxKrw: null,
-                    status: 'all',
-                  })
-                }
+                onClick={reset}
                 className="text-[13px] underline underline-offset-2"
                 style={{ color: 'var(--muted)' }}
               >
@@ -174,8 +225,10 @@ export default function FilterBar({
                 {FAMILIES.map((f) => (
                   <Toggle
                     key={f}
-                    active={filters.families.includes(f)}
-                    onClick={() => set({ families: toggleIn(filters.families, f) })}
+                    active={draftFilters.families.includes(f)}
+                    onClick={() =>
+                      schedule({ families: toggleIn(draftFilters.families, f) })
+                    }
                   >
                     {FAMILY_LABEL[f as Family]}
                   </Toggle>
@@ -189,9 +242,9 @@ export default function FilterBar({
                 {generations.map((g) => (
                   <Toggle
                     key={g}
-                    active={filters.generations.includes(g)}
+                    active={draftFilters.generations.includes(g)}
                     onClick={() =>
-                      set({ generations: toggleIn(filters.generations, g) })
+                      schedule({ generations: toggleIn(draftFilters.generations, g) })
                     }
                   >
                     M{g}
@@ -204,8 +257,10 @@ export default function FilterBar({
                 {TIERS.map((t) => (
                   <Toggle
                     key={t}
-                    active={filters.tiers.includes(t)}
-                    onClick={() => set({ tiers: toggleIn(filters.tiers, t as Tier) })}
+                    active={draftFilters.tiers.includes(t)}
+                    onClick={() =>
+                      schedule({ tiers: toggleIn(draftFilters.tiers, t as Tier) })
+                    }
                   >
                     {TIER_LABEL[t as Tier]}
                   </Toggle>
@@ -219,8 +274,10 @@ export default function FilterBar({
                 {sizes.map((s) => (
                   <Toggle
                     key={s}
-                    active={filters.sizes.includes(s)}
-                    onClick={() => set({ sizes: toggleIn(filters.sizes, s) })}
+                    active={draftFilters.sizes.includes(s)}
+                    onClick={() =>
+                      schedule({ sizes: toggleIn(draftFilters.sizes, s) })
+                    }
                   >
                     {s}&quot;
                   </Toggle>
@@ -246,7 +303,7 @@ export default function FilterBar({
                   formatValue={(value) => `${value}GB`}
                   ariaLabel="메모리"
                   onChange={(lower, upper) =>
-                    set({
+                    schedule({
                       minMemoryGb: lower === ranges.memory.min ? null : lower,
                       maxMemoryGb: upper === ranges.memory.max ? null : upper,
                     })
@@ -261,7 +318,9 @@ export default function FilterBar({
                     {storage.lower === ranges.storage.min
                       ? '최저'
                       : storageLabel(storage.lower)}{' '}
-                    – {storage.upper === ranges.storage.max ? '최고' : storageLabel(storage.upper)}
+                    – {storage.upper === ranges.storage.max
+                      ? '최고'
+                      : storageLabel(storage.upper)}
                   </span>
                 </div>
                 <RangeSlider
@@ -274,7 +333,7 @@ export default function FilterBar({
                   formatValue={storageLabel}
                   ariaLabel="저장장치"
                   onChange={(lower, upper) =>
-                    set({
+                    schedule({
                       minStorageGb: lower === ranges.storage.min ? null : lower,
                       maxStorageGb: upper === ranges.storage.max ? null : upper,
                     })
@@ -299,7 +358,7 @@ export default function FilterBar({
                   formatValue={priceLabel}
                   ariaLabel="가격"
                   onChange={(lower, upper) =>
-                    set({
+                    schedule({
                       minKrw: lower === ranges.price.min ? null : lower,
                       maxKrw: upper === ranges.price.max ? null : upper,
                     })
