@@ -153,14 +153,15 @@ export default function CompareTray({
       return { color: 'var(--text)', fontWeight: 400 }
     }
 
-    const progress =
-      attr.highlight === 'min'
-        ? (range.max - value) / (range.max - range.min)
-        : (value - range.min) / (range.max - range.min)
-    const strength = Math.round(35 + Math.max(0, Math.min(1, progress)) * 65)
+    const isBest = value === (attr.highlight === 'min' ? range.min : range.max)
+    const isWorst = value === (attr.highlight === 'min' ? range.max : range.min)
     return {
-      color: `color-mix(in srgb, var(--accent) ${strength}%, var(--muted))`,
-      fontWeight: progress >= 0.999 ? 700 : 500,
+      color: isBest
+        ? 'var(--accent)'
+        : isWorst
+          ? 'var(--danger)'
+          : 'var(--warn)',
+      fontWeight: isBest ? 700 : 500,
     }
   }
 
@@ -186,7 +187,12 @@ export default function CompareTray({
               <span className="text-[12px]" style={{ color: 'var(--muted)' }}>
                 {rows.length < 2
                   ? '2개 이상 선택하면 항목별 우열이 강조됩니다'
-                  : '숫자 색상이 진할수록 해당 항목에서 상대적으로 유리합니다'}
+                  : <>
+                      숫자형 항목:{' '}
+                      <b style={{ color: 'var(--accent)' }}>최고</b> ·{' '}
+                      <b style={{ color: 'var(--warn)' }}>중간</b> ·{' '}
+                      <b style={{ color: 'var(--danger)' }}>최하</b>
+                    </>}
               </span>
             </div>
 
