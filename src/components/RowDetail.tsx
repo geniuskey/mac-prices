@@ -33,7 +33,7 @@ function BenchmarkPanel({ row }: { row: Row }) {
               {benchmark.version ? ` ${benchmark.version}` : ''}
               {benchmark.memoryGb ? ` · ${benchmark.memoryGb}GB 실측` : ''}
             </div>
-            <div className="mt-0.5 grid grid-cols-3 gap-2 text-[12px]">
+            <div className="mt-0.5 grid grid-cols-2 gap-2 text-[12px] sm:grid-cols-5">
               <span>
                 CPU 싱글{' '}
                 <b className="tnum">{benchmark.singleCore?.toLocaleString('ko-KR') ?? '—'}</b>
@@ -45,6 +45,14 @@ function BenchmarkPanel({ row }: { row: Row }) {
               <span>
                 Metal{' '}
                 <b className="tnum">{benchmark.gpuMetal?.toLocaleString('ko-KR') ?? '—'}</b>
+              </span>
+              <span>
+                전력 유휴{' '}
+                <b className="tnum">{benchmark.powerIdleW ? `${benchmark.powerIdleW}W` : '—'}</b>
+              </span>
+              <span>
+                전력 최대{' '}
+                <b className="tnum">{benchmark.powerMaxW ? `${benchmark.powerMaxW}W` : '—'}</b>
               </span>
             </div>
             <div className="mt-0.5 text-[11px]" style={{ color: 'var(--muted)' }}>
@@ -68,7 +76,7 @@ function BenchmarkPanel({ row }: { row: Row }) {
         ))}
       </div>
       <div className="mt-2 text-[11px]" style={{ color: 'var(--warn)' }}>
-        외부 제출 결과이며 Mac Studio 자체의 실측값과는 다를 수 있습니다.
+        외부 제출 결과 또는 제조사 측정값이며 측정 장비·조건에 따라 달라질 수 있습니다.
       </div>
     </div>
   )

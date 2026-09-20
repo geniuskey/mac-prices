@@ -161,11 +161,15 @@ export const benchmarkSchema = z
     /** 측정 장비의 메모리·저장장치. 점수의 맥락을 보여주는 선택값이다. */
     memoryGb: z.number().int().positive().optional(),
     storageGb: z.number().int().positive().optional(),
+    variantLabel: z.string().optional(),
     suite: z.string().min(1),
     version: z.string().min(1).optional(),
     singleCore: z.number().int().positive().optional(),
     multiCore: z.number().int().positive().optional(),
     gpuMetal: z.number().int().positive().optional(),
+    /** 벽면에서 측정한 유휴·최대 소비전력(W). 측정 조건은 note에 적는다. */
+    powerIdleW: z.number().positive().optional(),
+    powerMaxW: z.number().positive().optional(),
     measuredAt: isoDate,
     sourceUrl: z.string().url(),
     device: z.string().min(1),
@@ -182,7 +186,9 @@ export const benchmarkSchema = z
     if (
       value.singleCore === undefined &&
       value.multiCore === undefined &&
-      value.gpuMetal === undefined
+      value.gpuMetal === undefined &&
+      value.powerIdleW === undefined &&
+      value.powerMaxW === undefined
     ) {
       ctx.addIssue({
         code: 'custom',

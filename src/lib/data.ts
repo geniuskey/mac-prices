@@ -193,7 +193,8 @@ export function loadDataset(asOf = new Date().toISOString().slice(0, 10)): Datas
     row.benchmarks = benchmarks.filter(
       (benchmark) =>
         (!benchmark.chipId || benchmark.chipId === row.chip.id) &&
-        (!benchmark.modelId || benchmark.modelId === row.modelId),
+        (!benchmark.modelId || benchmark.modelId === row.modelId) &&
+        (!benchmark.variantLabel || benchmark.variantLabel === row.variantLabel),
     )
   }
   const checkedDates = models.map((m) => m.checkedAt).sort()

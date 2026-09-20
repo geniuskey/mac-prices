@@ -17,8 +17,6 @@ export interface FilterRange {
 }
 
 export interface FilterRanges {
-  memory: FilterRange
-  storage: FilterRange
   price: FilterRange
 }
 
@@ -47,6 +45,100 @@ function selectedRange(
   return { lower, upper }
 }
 
+function orderedOptions(options: number[], selected: number[]) {
+  const available = new Set(options)
+  const selectedFirst = selected.filter((value) => available.has(value))
+  const selectedSet = new Set(selectedFirst)
+  return [...selectedFirst, ...options.filter((value) => !selectedSet.has(value))]
+}
+
+function CapacityToggles({
+  label,
+  options,
+  selected,
+  formatValue,
+  onChange,
+}: {
+  label: string
+  options: number[]
+  selected: number[]
+  formatValue: (value: number) => string
+  onChange: (values: number[]) => void
+}) {
+  const dragValueRef = useRef<number | null>(null)
+  const selectedSet = new Set(selected)
+
+  const dropOn = (target: number) => {
+    const source = dragValueRef.current
+    dragValueRef.current = null
+    if (source === null || source === target) return
+    const from = selected.indexOf(source)
+    const to = selected.indexOf(target)
+    if (from < 0 || to < 0) return
+    const next = [...selected]
+    next.splice(from, 1)
+    next.splice(to, 0, source)
+    onChange(next)
+  }
+
+  return (
+    <div>
+      <div className="mb-1 flex items-center justify-between gap-2">
+        <FieldLabel>{label}</FieldLabel>
+        <span className="tnum text-[11px]" style={{ color: 'var(--muted)' }}>
+          {selected.length === 0 ? '전체' : `${selected.length}개 선택`}
+        </span>
+      </div>
+      <div className="flex flex-wrap gap-1.5" role="group" aria-label={label}>
+        {orderedOptions(options, selected).map((value) => {
+          const active = selectedSet.has(value)
+          return (
+            <Toggle
+              key={value}
+              active={active}
+              onClick={() =>
+                onChange(
+                  active
+                    ? selected.filter((item) => item !== value)
+                    : [...selected, value],
+                )
+              }
+              draggable={active}
+              onDragStart={
+                active
+                  ? (event) => {
+                      dragValueRef.current = value
+                      event.dataTransfer.effectAllowed = 'move'
+                      event.dataTransfer.setData('text/plain', String(value))
+                    }
+                  : undefined
+              }
+              onDragOver={
+                active
+                  ? (event) => {
+                      event.preventDefault()
+                      event.dataTransfer.dropEffect = 'move'
+                    }
+                  : undefined
+              }
+              onDrop={active ? (event) => { event.preventDefault(); dropOn(value) } : undefined}
+              title={active ? '드래그해서 선택 순서를 변경' : undefined}
+              ariaLabel={`${label} ${formatValue(value)}`}
+            >
+              {formatValue(value)}
+            </Toggle>
+          )
+        })}
+      </div>
+      {selected.length > 1 && (
+        <div className="mt-1 text-[11px]" style={{ color: 'var(--muted)' }}>
+          선택된 값은 드래그해서 순서를 바꿀 수 있습니다.
+        </div>
+      )}
+    </div>
+  )
+}
+
 function sameFilters(a: FilterState, b: FilterState) {
   return (
     a.q === b.q &&
@@ -54,10 +146,8 @@ function sameFilters(a: FilterState, b: FilterState) {
     a.generations.join(',') === b.generations.join(',') &&
     a.tiers.join(',') === b.tiers.join(',') &&
     a.sizes.join(',') === b.sizes.join(',') &&
-    a.minMemoryGb === b.minMemoryGb &&
-    a.maxMemoryGb === b.maxMemoryGb &&
-    a.minStorageGb === b.minStorageGb &&
-    a.maxStorageGb === b.maxStorageGb &&
+    a.memoriesGb.join(',') === b.memoriesGb.join(',') &&
+    a.storagesGb.join(',') === b.storagesGb.join(',') &&
     a.minKrw === b.minKrw &&
     a.maxKrw === b.maxKrw &&
     a.status === b.status
@@ -72,6 +162,8 @@ export default function FilterBar({
   resultCount,
   totalCount,
   ranges,
+  memoryOptions,
+  storageOptions,
 }: {
   filters: FilterState
   onChange: (next: FilterState) => void
@@ -80,6 +172,8 @@ export default function FilterBar({
   resultCount: number
   totalCount: number
   ranges: FilterRanges
+  memoryOptions: number[]
+  storageOptions: number[]
 }) {
   const [open, setOpen] = useState(false)
   const [draftFilters, setDraftFilters] = useState(filters)
@@ -134,16 +228,6 @@ export default function FilterBar({
     onChange(EMPTY_FILTERS)
   }
 
-  const memory = selectedRange(
-    ranges.memory,
-    draftFilters.minMemoryGb,
-    draftFilters.maxMemoryGb,
-  )
-  const storage = selectedRange(
-    ranges.storage,
-    draftFilters.minStorageGb,
-    draftFilters.maxStorageGb,
-  )
   const price = selectedRange(ranges.price, draftFilters.minKrw, draftFilters.maxKrw)
 
   const storageLabel = (gb: number) =>
@@ -287,57 +371,22 @@ export default function FilterBar({
 
             <div className="space-y-3 border-t pt-3" style={{ borderColor: 'var(--border)' }}>
               <div>
-                <div className="mb-1 flex items-center justify-between gap-2">
-                  <FieldLabel>메모리</FieldLabel>
-                  <span className="tnum text-[11px]" style={{ color: 'var(--muted)' }}>
-                    {memory.lower === ranges.memory.min ? '최저' : `${memory.lower}GB`} –{' '}
-                    {memory.upper === ranges.memory.max ? '최고' : `${memory.upper}GB`}
-                  </span>
-                </div>
-                <RangeSlider
-                  min={ranges.memory.min}
-                  max={ranges.memory.max}
-                  values={ranges.memory.values}
-                  lower={memory.lower}
-                  upper={memory.upper}
+                <CapacityToggles
+                  label="메모리"
+                  options={memoryOptions}
+                  selected={draftFilters.memoriesGb}
                   formatValue={(value) => `${value}GB`}
-                  ariaLabel="메모리"
-                  onChange={(lower, upper) =>
-                    schedule({
-                      minMemoryGb: lower === ranges.memory.min ? null : lower,
-                      maxMemoryGb: upper === ranges.memory.max ? null : upper,
-                    })
-                  }
+                  onChange={(values) => schedule({ memoriesGb: values })}
                 />
               </div>
 
               <div>
-                <div className="mb-1 flex items-center justify-between gap-2">
-                  <FieldLabel>저장장치</FieldLabel>
-                  <span className="tnum text-[11px]" style={{ color: 'var(--muted)' }}>
-                    {storage.lower === ranges.storage.min
-                      ? '최저'
-                      : storageLabel(storage.lower)}{' '}
-                    – {storage.upper === ranges.storage.max
-                      ? '최고'
-                      : storageLabel(storage.upper)}
-                  </span>
-                </div>
-                <RangeSlider
-                  min={ranges.storage.min}
-                  max={ranges.storage.max}
-                  values={ranges.storage.values}
-                  lower={storage.lower}
-                  upper={storage.upper}
-                  step={256}
+                <CapacityToggles
+                  label="저장장치"
+                  options={storageOptions}
+                  selected={draftFilters.storagesGb}
                   formatValue={storageLabel}
-                  ariaLabel="저장장치"
-                  onChange={(lower, upper) =>
-                    schedule({
-                      minStorageGb: lower === ranges.storage.min ? null : lower,
-                      maxStorageGb: upper === ranges.storage.max ? null : upper,
-                    })
-                  }
+                  onChange={(values) => schedule({ storagesGb: values })}
                 />
               </div>
 

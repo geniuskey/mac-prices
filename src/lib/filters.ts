@@ -6,10 +6,8 @@ export interface FilterState {
   generations: number[]
   tiers: Tier[]
   sizes: number[]
-  minMemoryGb: number | null
-  maxMemoryGb: number | null
-  minStorageGb: number | null
-  maxStorageGb: number | null
+  memoriesGb: number[]
+  storagesGb: number[]
   minKrw: number | null
   maxKrw: number | null
   status: 'all' | 'current' | 'discontinued'
@@ -21,10 +19,8 @@ export const EMPTY_FILTERS: FilterState = {
   generations: [],
   tiers: [],
   sizes: [],
-  minMemoryGb: null,
-  maxMemoryGb: null,
-  minStorageGb: null,
-  maxStorageGb: null,
+  memoriesGb: [],
+  storagesGb: [],
   minKrw: null,
   maxKrw: null,
   status: 'all',
@@ -79,10 +75,8 @@ export function filterRows(rows: Row[], f: FilterState): Row[] {
       // 15.3"→15, 16.2"→16. round 를 쓰면 Air 13 이 Pro 14 와 겹친다.
       if (!f.sizes.includes(Math.floor(row.displaySizeInch))) return false
     }
-    if (f.minMemoryGb !== null && row.memoryGb < f.minMemoryGb) return false
-    if (f.maxMemoryGb !== null && row.memoryGb > f.maxMemoryGb) return false
-    if (f.minStorageGb !== null && row.storageGb < f.minStorageGb) return false
-    if (f.maxStorageGb !== null && row.storageGb > f.maxStorageGb) return false
+    if (f.memoriesGb.length && !f.memoriesGb.includes(row.memoryGb)) return false
+    if (f.storagesGb.length && !f.storagesGb.includes(row.storageGb)) return false
     if (f.minKrw !== null && row.priceKrw < f.minKrw) return false
     if (f.maxKrw !== null && row.priceKrw > f.maxKrw) return false
     if (f.status === 'current' && !row.isCurrent) return false
@@ -134,10 +128,8 @@ export function isFiltered(f: FilterState): boolean {
     f.generations.length > 0 ||
     f.tiers.length > 0 ||
     f.sizes.length > 0 ||
-    f.minMemoryGb !== null ||
-    f.maxMemoryGb !== null ||
-    f.minStorageGb !== null ||
-    f.maxStorageGb !== null ||
+    f.memoriesGb.length > 0 ||
+    f.storagesGb.length > 0 ||
     f.minKrw !== null ||
     f.maxKrw !== null ||
     f.status !== 'all'
@@ -157,10 +149,8 @@ export function toQuery(
   if (f.generations.length) p.set('gen', f.generations.join(','))
   if (f.tiers.length) p.set('tier', f.tiers.join(','))
   if (f.sizes.length) p.set('size', f.sizes.join(','))
-  if (f.minMemoryGb !== null) p.set('mem', String(f.minMemoryGb))
-  if (f.maxMemoryGb !== null) p.set('memMax', String(f.maxMemoryGb))
-  if (f.minStorageGb !== null) p.set('sto', String(f.minStorageGb))
-  if (f.maxStorageGb !== null) p.set('stoMax', String(f.maxStorageGb))
+  if (f.memoriesGb.length) p.set('mem', f.memoriesGb.join(','))
+  if (f.storagesGb.length) p.set('sto', f.storagesGb.join(','))
   if (f.minKrw !== null) p.set('min', String(f.minKrw))
   if (f.maxKrw !== null) p.set('max', String(f.maxKrw))
   if (f.status !== 'all') p.set('status', f.status)
@@ -188,6 +178,11 @@ const SORT_KEYS: SortKey[] = [
   'name',
 ]
 
+// 예전 URL의 min/max 범위를 새 고정값 선택 목록으로 변환할 때 사용한다.
+// 현재 데이터에 없는 값도 포함해 과거에 공유된 링크를 최대한 보존한다.
+const KNOWN_MEMORY_VALUES = [8, 16, 18, 24, 32, 36, 48, 64, 96, 128, 192, 256, 512]
+const KNOWN_STORAGE_VALUES = [256, 512, 1024, 2048, 4096, 8192]
+
 export function fromQuery(
   search: string,
   fallbackNormalize = { memoryGb: 16, storageGb: 512 },
@@ -203,6 +198,15 @@ export function fromQuery(
   const num = (k: string) => {
     const v = Number(p.get(k))
     return p.has(k) && Number.isFinite(v) ? v : null
+  }
+  const capacityValues = (key: string, legacyMaxKey: string, known: number[]) => {
+    const values = nums(key)
+    const legacyMax = num(legacyMaxKey)
+    if (legacyMax === null && !p.has(legacyMaxKey)) return values
+
+    const min = values[0] ?? known[0]
+    const max = legacyMax ?? known.at(-1)!
+    return known.filter((value) => value >= min && value <= max)
   }
 
   const sortKey = p.get('sort') as SortKey | null
@@ -225,10 +229,8 @@ export function fromQuery(
       generations: nums('gen'),
       tiers: strs('tier') as Tier[],
       sizes: nums('size'),
-      minMemoryGb: num('mem'),
-      maxMemoryGb: num('memMax'),
-      minStorageGb: num('sto'),
-      maxStorageGb: num('stoMax'),
+      memoriesGb: capacityValues('mem', 'memMax', KNOWN_MEMORY_VALUES),
+      storagesGb: capacityValues('sto', 'stoMax', KNOWN_STORAGE_VALUES),
       minKrw: num('min'),
       maxKrw: num('max'),
       status:

@@ -153,32 +153,26 @@ export default function Explorer({
     [allRows],
   )
 
+  const memoryOptions = useMemo(
+    () => [...new Set(allRows.map((row) => row.memoryGb))].sort((a, b) => a - b),
+    [allRows],
+  )
+  const storageOptions = useMemo(
+    () => [...new Set(allRows.map((row) => row.storageGb))].sort((a, b) => a - b),
+    [allRows],
+  )
+
   const filterRanges = useMemo<FilterRanges>(() => {
-    const bounds = (
-      values: number[],
-      fallback: { min: number; max: number },
-      discrete = false,
-    ) => {
+    const bounds = (values: number[], fallback: { min: number; max: number }) => {
       if (values.length === 0) return fallback
       const unique = [...new Set(values)].sort((a, b) => a - b)
       return {
         min: unique[0],
         max: unique[unique.length - 1],
-        ...(discrete ? { values: unique } : {}),
       }
     }
 
     return {
-      memory: bounds(
-        allRows.map((row) => row.memoryGb),
-        { min: 0, max: 1 },
-        true,
-      ),
-      storage: bounds(
-        allRows.map((row) => row.storageGb),
-        { min: 0, max: 1 },
-        true,
-      ),
       price: bounds(
         allRows.map((row) => row.priceKrw),
         { min: 0, max: 1 },
@@ -333,6 +327,8 @@ export default function Explorer({
               resultCount={visibleRows.length}
               totalCount={baseRows.length}
               ranges={filterRanges}
+              memoryOptions={memoryOptions}
+              storageOptions={storageOptions}
             />
           </aside>
 

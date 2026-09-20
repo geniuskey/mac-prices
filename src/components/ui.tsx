@@ -1,23 +1,38 @@
 'use client'
 
-import type { ReactNode } from 'react'
+import type { DragEventHandler, ReactNode } from 'react'
 
 export function Toggle({
   active,
   onClick,
   children,
   title,
+  draggable,
+  onDragStart,
+  onDragOver,
+  onDrop,
+  ariaLabel,
 }: {
   active: boolean
   onClick: () => void
   children: ReactNode
   title?: string
+  draggable?: boolean
+  onDragStart?: DragEventHandler<HTMLButtonElement>
+  onDragOver?: DragEventHandler<HTMLButtonElement>
+  onDrop?: DragEventHandler<HTMLButtonElement>
+  ariaLabel?: string
 }) {
   return (
     <button
       type="button"
       onClick={onClick}
       title={title}
+      draggable={draggable}
+      onDragStart={onDragStart}
+      onDragOver={onDragOver}
+      onDrop={onDrop}
+      aria-label={ariaLabel}
       aria-pressed={active}
       className="rounded-full border px-2.5 py-1 text-[13px] leading-5 transition-colors"
       style={{

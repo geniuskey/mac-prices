@@ -95,14 +95,12 @@ describe('filterRows', () => {
     expect(filterRows(rows, { ...EMPTY_FILTERS, status: 'discontinued' }).map((r) => r.id)).toEqual(['c'])
   })
 
-  it('메모리·저장장치의 최소·최대 범위를 함께 적용한다', () => {
+  it('메모리·저장장치는 선택한 고정값만 통과한다', () => {
     const expanded = [...rows, row({ id: 'e', memoryGb: 24, storageGb: 512 })]
     const filtered = filterRows(expanded, {
       ...EMPTY_FILTERS,
-      minMemoryGb: 16,
-      maxMemoryGb: 16,
-      minStorageGb: 256,
-      maxStorageGb: 512,
+      memoriesGb: [16],
+      storagesGb: [256, 512],
     })
     expect(filtered.map((r) => r.id).sort()).toEqual(['a', 'b', 'c', 'd'])
   })
@@ -131,8 +129,8 @@ describe('URL 직렬화', () => {
       families: ['macbook-pro' as const],
       generations: [3, 4],
       tiers: ['max' as const],
-      maxMemoryGb: 64,
-      maxStorageGb: 2048,
+      memoriesGb: [32, 64],
+      storagesGb: [512, 2048],
       maxKrw: 5000000,
       status: 'current' as const,
     }
@@ -153,6 +151,15 @@ describe('URL 직렬화', () => {
 
   it('잘못된 sort 키는 기본값으로 떨어진다', () => {
     expect(fromQuery('sort=nonsense').sort.key).toBe(DEFAULT_SORT.key)
+  })
+
+  it('예전 메모리·저장장치 범위 URL을 고정값 선택으로 읽는다', () => {
+    expect(fromQuery('mem=16&memMax=256').filters.memoriesGb).toEqual([
+      16, 18, 24, 32, 36, 48, 64, 96, 128, 192, 256,
+    ])
+    expect(fromQuery('sto=512&stoMax=4096').filters.storagesGb).toEqual([
+      512, 1024, 2048, 4096,
+    ])
   })
 
   it('norm 이 없으면 동일 조건 기본값을 그대로 쓴다', () => {
