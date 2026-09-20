@@ -9,14 +9,14 @@
     { "chipId": "m5-pro-18c-20g", "memoryGb": 24, "storageGb": 512, "isBaseConfig": false, "prices": [{ "krw": 3340000, "effectiveFrom": "2026-09-22", "estimated": true, "note": "상위 바인딩 미화 차액(+$200)을 원화로 환산한 추정치" }] }
   ],
   "upgrades": [
-    {"kind":"memory","fromValue":24,"toValue":48,"krw":1020000},
-    {"kind":"memory","fromValue":24,"toValue":64,"krw":1700000},
+    {"kind":"memory","fromValue":24,"toValue":48,"krw":1020000,"chipId":"m5-pro-18c-20g"},
+    {"kind":"memory","fromValue":24,"toValue":64,"krw":1700000,"chipId":"m5-pro-18c-20g"},
     {"kind":"storage","fromValue":512,"toValue":1024,"krw":510000},
     {"kind":"storage","fromValue":512,"toValue":2048,"krw":1360000},
-    {"kind":"storage","fromValue":512,"toValue":4096,"krw":3060000},
-    {"kind":"storage","fromValue":512,"toValue":8192,"krw":6460000}
+    {"kind":"storage","fromValue":512,"toValue":4096,"krw":3060000,"chipId":"m5-pro-18c-20g"},
+    {"kind":"storage","fromValue":512,"toValue":8192,"krw":6460000,"chipId":"m5-pro-18c-20g"}
   ],
   "sourceUrl": "https://www.apple.com/newsroom/2026/08/apple-unveils-a-more-powerful-mac-mini-featuring-the-all-new-m6-and-m5-pro/",
   "checkedAt": "2026-08-29", "verified": true, "verifiedSource": "press", "upgradesVerified": false,
-  "notes": "M5 Pro 는 15코어 CPU/16코어 GPU 와 18코어/20코어 두 바인딩으로 나온다. 업그레이드 단가는 미화 공시가를 환산한 추정치."
+  "notes": "M5 Pro 는 15코어 CPU/16코어 GPU 와 18코어/20코어 두 바인딩으로 나온다. 15코어 바인딩은 24GB와 2TB까지, 18코어 바인딩부터 48/64GB와 4/8TB를 선택할 수 있다. 업그레이드 단가는 미화 공시가를 환산한 추정치."
 }

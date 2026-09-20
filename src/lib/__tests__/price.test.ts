@@ -126,6 +126,22 @@ describe('옵션별 row 확장', () => {
         ?.benchmarks?.some((benchmark) => benchmark.multiCore === 30105),
     ).toBe(true)
   })
+
+  it('Mac mini M5 Pro는 15코어 바인딩에서 고메모리·고용량 SSD를 만들지 않는다', () => {
+    const dataset = loadDataset('2026-09-20')
+    const rows = dataset.rows.filter((row) => row.modelId === 'mac-mini-m5-pro-2026')
+    const low = rows.filter((row) => row.chip.id === 'm5-pro-15c-16g')
+    const high = rows.filter((row) => row.chip.id === 'm5-pro-18c-20g')
+
+    expect(low.map((row) => `${row.memoryGb}/${row.storageGb}`).sort()).toEqual([
+      '24/1024',
+      '24/2048',
+      '24/512',
+    ])
+    expect(low.every((row) => row.memoryGb === 24 && row.storageGb <= 2048)).toBe(true)
+    expect(high.some((row) => row.memoryGb === 48 && row.storageGb === 4096)).toBe(true)
+    expect(high.some((row) => row.memoryGb === 64 && row.storageGb === 8192)).toBe(true)
+  })
 })
 
 describe('추정 가격 전파', () => {
