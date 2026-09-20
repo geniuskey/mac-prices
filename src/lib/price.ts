@@ -27,7 +27,7 @@ export function buildRows(
   const rows: Row[] = []
 
   for (const model of models) {
-    for (const [i, config] of model.configs.entries()) {
+    for (const config of expandConfigs(model, chipById, asOf)) {
       const chip = chipById.get(config.chipId)
       if (!chip) {
         throw new Error(
@@ -36,7 +36,7 @@ export function buildRows(
       }
       const price = priceAt(config.prices, asOf)
       rows.push({
-        id: `${model.id}--${config.chipId}--${config.memoryGb}-${config.storageGb}-${i}`,
+        id: `${model.id}--${config.chipId}--${config.memoryGb}-${config.storageGb}-${config.variantLabel ?? ''}`,
         modelId: model.id,
         family: model.family,
         displayName: model.displayName,
@@ -68,6 +68,135 @@ export function buildRows(
     }
   }
   return rows
+}
+
+type Config = Model['configs'][number]
+
+function matchesChip(upgrade: Model['upgrades'][number], chipId: string): boolean {
+  return upgrade.chipId === undefined || upgrade.chipId === chipId
+}
+
+function optionValues(
+  model: Model,
+  kind: 'memory' | 'storage',
+  chipId: string,
+  fromValue: number,
+): number[] {
+  return [
+    fromValue,
+    ...model.upgrades
+      .filter(
+        (u) =>
+          u.kind === kind &&
+          u.fromValue === fromValue &&
+          matchesChip(u, chipId),
+      )
+      .map((u) => u.toValue),
+  ].filter((value, i, values) => values.indexOf(value) === i)
+}
+
+function optionCost(
+  model: Model,
+  kind: 'memory' | 'storage',
+  chipId: string,
+  fromValue: number,
+  toValue: number,
+): number | null {
+  if (fromValue === toValue) return 0
+  const upgrade = model.upgrades.find(
+    (u) =>
+      u.kind === kind &&
+      u.fromValue === fromValue &&
+      u.toValue === toValue &&
+      matchesChip(u, chipId),
+  )
+  return upgrade?.krw ?? null
+}
+
+function pricesWithOptions(
+  prices: Config['prices'],
+  optionKrw: number,
+): Config['prices'] {
+  if (optionKrw === 0) return prices
+  return prices.map((price) => ({
+    ...price,
+    krw: price.krw + optionKrw,
+    note: `${price.note ? `${price.note} · ` : ''}기본 구성 + 옵션 ${optionKrw.toLocaleString('ko-KR')}원`,
+  }))
+}
+
+function configKey(config: Config): string {
+  return `${config.chipId}/${config.memoryGb}/${config.storageGb}/${config.variantLabel ?? ''}`
+}
+
+/**
+ * 데이터에 적힌 기본 구성과 BTO 업그레이드를 구매 가능한 옵션 조합으로
+ * 펼친다. 명시된 config가 있으면 그 가격을 우선하고, 없는 조합만
+ * 기본가 + 메모리 옵션 + 저장장치 옵션으로 만든다.
+ */
+function expandConfigs(
+  model: Model,
+  chipById: Map<string, Chip>,
+  asOf: string,
+): Config[] {
+  const configs = new Map<string, Config>()
+  const explicitKeys = new Set(model.configs.map(configKey))
+
+  // 명시된 SKU는 파생 가격보다 우선한다. 같은 칩·메모리·저장장치 조합이
+  // 중복 생성되더라도 Apple이 직접 기록한 가격을 보존하기 위함이다.
+  for (const config of model.configs) configs.set(configKey(config), config)
+
+  for (const base of model.configs) {
+    const chip = chipById.get(base.chipId)
+    if (!chip) continue
+
+    const memories = optionValues(model, 'memory', base.chipId, base.memoryGb)
+    const storages = optionValues(model, 'storage', base.chipId, base.storageGb)
+
+    for (const memoryGb of memories) {
+      // 칩 바인딩에 정의된 메모리 상한을 넘는 가상 row를 만들지 않는다.
+      if (memoryGb > chip.maxMemoryGb) continue
+      const memoryKrw = optionCost(
+        model,
+        'memory',
+        base.chipId,
+        base.memoryGb,
+        memoryGb,
+      )
+      if (memoryKrw === null) continue
+
+      for (const storageGb of storages) {
+        const storageKrw = optionCost(
+          model,
+          'storage',
+          base.chipId,
+          base.storageGb,
+          storageGb,
+        )
+        if (storageKrw === null) continue
+
+        const config: Config = {
+          ...base,
+          memoryGb,
+          storageGb,
+          isBaseConfig: false,
+          prices: pricesWithOptions(base.prices, memoryKrw + storageKrw),
+        }
+        const key = configKey(config)
+        if (explicitKeys.has(key)) continue
+
+        const current = configs.get(key)
+        if (
+          !current ||
+          priceAt(config.prices, asOf).krw < priceAt(current.prices, asOf).krw
+        ) {
+          configs.set(key, config)
+        }
+      }
+    }
+  }
+
+  return [...configs.values()]
 }
 
 /** 한 축(메모리 또는 저장장치)을 from → to 로 올리는 비용. 불가능하면 null. */

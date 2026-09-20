@@ -1,7 +1,7 @@
 import { loadRaw } from '../src/lib/data'
 import { buildRows } from '../src/lib/price'
 
-const { chips, models, errors } = loadRaw()
+const { chips, models, benchmarks, errors } = loadRaw()
 
 if (errors.length) {
   console.error(`\n데이터 검증 실패 — ${errors.length}건\n`)
@@ -24,7 +24,8 @@ for (const m of models) {
 console.log(`\n데이터 검증 통과`)
 console.log(`  칩       ${chips.length}종`)
 console.log(`  모델     ${models.length}개`)
-console.log(`  구성     ${rows.length}개`)
+console.log(`  벤치마크 ${benchmarks.length}개`)
+console.log(`  구성 row ${rows.length}개`)
 console.log(`  현행     ${models.filter((m) => m.discontinuedAt === null).length}개`)
 
 console.log(`\n기본 정가 대조 ${models.length - unverified.length}/${models.length}`)

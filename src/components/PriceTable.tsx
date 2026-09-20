@@ -4,6 +4,7 @@ import { Fragment } from 'react'
 import type { Model, Row } from '@/lib/types'
 import type { SortKey, SortState } from '@/lib/filters'
 import { formatKrw, formatKrwShort, formatStorage } from '@/lib/price'
+import { summarizeBenchmarks } from '@/lib/benchmarks'
 import { FAMILY_LABEL } from '@/lib/schema'
 import { Badge, FieldLabel, Select } from './ui'
 import RowDetail from './RowDetail'
@@ -169,6 +170,7 @@ export default function PriceTable({
             const infeasible = row.normalized?.feasible === false
             const expanded = expandedId === row.id
             const model = models.get(row.modelId)
+            const benchmark = summarizeBenchmarks(row.benchmarks)
             const barPct = infeasible
               ? 0
               : Math.max(2, (row.priceKrw / maxPrice) * 100)
@@ -213,6 +215,14 @@ export default function PriceTable({
                       {FAMILY_LABEL[row.family]} · {row.chip.family} ·{' '}
                       {row.chip.cpuCores}C / {row.chip.gpuCores}G
                     </div>
+                    {(benchmark.singleCore || benchmark.multiCore || benchmark.gpuMetal) && (
+                      <div className="mt-1 text-[11px]" style={{ color: 'var(--muted)' }}>
+                        GB6
+                        {benchmark.singleCore ? ` 싱글 ${benchmark.singleCore.toLocaleString('ko-KR')}` : ''}
+                        {benchmark.multiCore ? ` · 멀티 ${benchmark.multiCore.toLocaleString('ko-KR')}` : ''}
+                        {benchmark.gpuMetal ? ` · Metal ${benchmark.gpuMetal.toLocaleString('ko-KR')}` : ''}
+                      </div>
+                    )}
                   </td>
 
                   <td className={`tnum px-2 py-2 text-right ${hideClass('lg')}`}>

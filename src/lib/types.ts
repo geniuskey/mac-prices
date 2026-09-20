@@ -1,5 +1,6 @@
 import type {
   Chip,
+  Benchmark,
   Family,
   PriceSnapshot,
   Tier,
@@ -8,7 +9,7 @@ import type {
 import type { z } from 'zod'
 
 export type Model = z.infer<typeof modelSchema>
-export type { Chip, Family, PriceSnapshot, Tier }
+export type { Benchmark, Chip, Family, PriceSnapshot, Tier }
 
 /** 표의 한 행 = 구매 가능한 구성 하나. */
 export interface Row {
@@ -42,6 +43,8 @@ export interface Row {
   upcoming: boolean
   checkedAt: string
   sourceUrl?: string
+  /** 칩 또는 제품에 연결된 외부 벤치마크 참고값 */
+  benchmarks?: Benchmark[]
   /** 동일 조건 비교가 켜졌을 때만 채워진다. */
   normalized?: NormalizeResult
 }
@@ -62,6 +65,7 @@ export interface NormalizeResult {
 export interface Dataset {
   models: Model[]
   chips: Chip[]
+  benchmarks: Benchmark[]
   rows: Row[]
   /** 데이터 전체에서 가장 오래된 checkedAt — 사이트 기준일 표시에 쓴다. */
   oldestCheckedAt: string

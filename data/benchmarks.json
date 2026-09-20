@@ -1,0 +1,52 @@
+[
+  {
+    "id": "geekbench6-m5-max-32g-cpu-36gb",
+    "chipId": "m5-max-18c-32g",
+    "memoryGb": 36,
+    "suite": "Geekbench 6",
+    "version": "6.4.0",
+    "singleCore": 4331,
+    "multiCore": 29756,
+    "measuredAt": "2026-09-13",
+    "sourceUrl": "https://browser.geekbench.com/v6/cpu/19165111",
+    "device": "MacBook Pro (16-inch, 2026), Mac17,6",
+    "note": "동일한 18코어 M5 Max의 36GB 시스템 CPU 결과. Mac Studio 실측값이 아닌 칩 참고값이다."
+  },
+  {
+    "id": "geekbench6-m5-max-32g-metal-36gb",
+    "chipId": "m5-max-18c-32g",
+    "memoryGb": 36,
+    "suite": "Geekbench 6",
+    "version": "6.7.1",
+    "gpuMetal": 189086,
+    "measuredAt": "2026-06-29",
+    "sourceUrl": "https://browser.geekbench.com/v6/compute/6650552",
+    "device": "MacBook Pro (16-inch, 2026), Mac17,6",
+    "note": "36GB 구성의 Metal 결과. Mac Studio 실측값이 아닌 32코어 GPU 칩 참고값이다."
+  },
+  {
+    "id": "geekbench6-m5-max-40g-cpu-48gb",
+    "chipId": "m5-max-18c-40g",
+    "memoryGb": 48,
+    "suite": "Geekbench 6",
+    "version": "6.7.1",
+    "singleCore": 4324,
+    "multiCore": 30105,
+    "measuredAt": "2026-06-27",
+    "sourceUrl": "https://browser.geekbench.com/v6/cpu/18502480",
+    "device": "MacBook Pro (16-inch, 2026), Mac17,6",
+    "note": "동일한 18코어 M5 Max의 48GB 시스템 CPU 결과. Mac Studio 실측값이 아닌 칩 참고값이다."
+  },
+  {
+    "id": "geekbench6-m5-max-40g-metal-128gb",
+    "chipId": "m5-max-18c-40g",
+    "memoryGb": 128,
+    "suite": "Geekbench 6",
+    "version": "6.7.1",
+    "gpuMetal": 224236,
+    "measuredAt": "2026-05-11",
+    "sourceUrl": "https://browser.geekbench.com/v6/compute/6388180",
+    "device": "MacBook Pro (16-inch, 2026), Mac17,6",
+    "note": "128GB 구성의 Metal 결과. 128GB는 M5 Max 40코어 GPU 구성에서만 가능하며, Mac Studio 실측값이 아닌 칩 참고값이다."
+  }
+]

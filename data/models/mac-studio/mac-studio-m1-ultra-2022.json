@@ -1,7 +1,7 @@
 {
-  "id": "mac-studio-m1-2022",
+  "id": "mac-studio-m1-ultra-2022",
   "family": "mac-studio",
-  "displayName": "Mac Studio (M1 Max/Ultra, 2022)",
+  "displayName": "Mac Studio (M1 Ultra, 2022)",
   "releasedAt": "2022-03-18",
   "discontinuedAt": "2023-06-13",
   "display": null,
@@ -17,22 +17,10 @@
   "weightKg": 2.7,
   "configs": [
     {
-      "chipId": "m1-max-10c-24g",
-      "memoryGb": 32,
-      "storageGb": 512,
-      "isBaseConfig": true,
-      "prices": [
-        {
-          "krw": 2690000,
-          "effectiveFrom": "2022-03-18"
-        }
-      ]
-    },
-    {
       "chipId": "m1-ultra-20c-48g",
       "memoryGb": 64,
       "storageGb": 1024,
-      "isBaseConfig": false,
+      "isBaseConfig": true,
       "prices": [
         {
           "krw": 5390000,
@@ -44,35 +32,10 @@
   "upgrades": [
     {
       "kind": "memory",
-      "fromValue": 32,
-      "toValue": 64,
-      "krw": 600000,
-      "chipId": "m1-max-10c-24g"
-    },
-    {
-      "kind": "memory",
       "fromValue": 64,
       "toValue": 128,
       "krw": 1200000,
       "chipId": "m1-ultra-20c-48g"
-    },
-    {
-      "kind": "storage",
-      "fromValue": 512,
-      "toValue": 1024,
-      "krw": 300000
-    },
-    {
-      "kind": "storage",
-      "fromValue": 512,
-      "toValue": 2048,
-      "krw": 900000
-    },
-    {
-      "kind": "storage",
-      "fromValue": 512,
-      "toValue": 4096,
-      "krw": 1800000
     },
     {
       "kind": "storage",

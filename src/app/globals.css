@@ -68,6 +68,51 @@ button {
   font-family: inherit;
 }
 
+.range-slider-input {
+  appearance: none;
+  background: transparent;
+  height: 1.25rem;
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+}
+
+.range-slider-input::-webkit-slider-thumb {
+  appearance: none;
+  background: var(--accent);
+  border: 2px solid var(--surface);
+  border-radius: 9999px;
+  box-shadow: 0 0 0 1px var(--accent);
+  cursor: pointer;
+  height: 1rem;
+  pointer-events: auto;
+  width: 1rem;
+}
+
+.range-slider-input::-moz-range-thumb {
+  background: var(--accent);
+  border: 2px solid var(--surface);
+  border-radius: 9999px;
+  box-shadow: 0 0 0 1px var(--accent);
+  cursor: pointer;
+  height: 0.75rem;
+  pointer-events: auto;
+  width: 0.75rem;
+}
+
+.range-slider-input:focus-visible {
+  outline: none;
+}
+
+.range-slider-input:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 3px var(--accent-soft), 0 0 0 4px var(--accent);
+}
+
+.range-slider-input:focus-visible::-moz-range-thumb {
+  box-shadow: 0 0 0 3px var(--accent-soft), 0 0 0 4px var(--accent);
+}
+
 ::selection {
   background: var(--accent-soft);
 }

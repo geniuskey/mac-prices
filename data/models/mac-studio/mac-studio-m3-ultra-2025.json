@@ -1,0 +1,90 @@
+{
+  "id": "mac-studio-m3-ultra-2025",
+  "family": "mac-studio",
+  "displayName": "Mac Studio (M3 Ultra, 2025)",
+  "releasedAt": "2025-03-12",
+  "discontinuedAt": null,
+  "display": null,
+  "ports": {
+    "thunderbolt": 6,
+    "thunderboltVersion": 5,
+    "usbA": 2,
+    "hdmi": 1,
+    "sdCard": true,
+    "ethernet": true,
+    "headphone": true
+  },
+  "weightKg": 2.74,
+  "configs": [
+    {
+      "chipId": "m3-ultra-28c-60g",
+      "memoryGb": 96,
+      "storageGb": 1024,
+      "isBaseConfig": true,
+      "prices": [
+        {
+          "krw": 6590000,
+          "effectiveFrom": "2025-03-12"
+        },
+        {
+          "krw": 7590000,
+          "effectiveFrom": "2026-06-25",
+          "source": "apple-kr",
+          "note": "전 라인 인상. 보도는 최저가 구성만 다뤄, 기본 구성과 같은 인상 폭을 적용한 추정치",
+          "estimated": true
+        }
+      ]
+    },
+    {
+      "chipId": "m3-ultra-32c-80g",
+      "memoryGb": 96,
+      "storageGb": 1024,
+      "isBaseConfig": false,
+      "prices": [
+        {
+          "krw": 8840000,
+          "effectiveFrom": "2025-03-12",
+          "source": "apple-kr"
+        },
+        {
+          "krw": 9840000,
+          "effectiveFrom": "2026-06-25",
+          "source": "apple-kr",
+          "note": "전 라인 인상. 보도는 최저가 구성만 다뤄, 기본 구성과 같은 인상 폭을 적용한 추정치",
+          "estimated": true
+        }
+      ]
+    }
+  ],
+  "upgrades": [
+    {
+      "kind": "memory",
+      "fromValue": 96,
+      "toValue": 256,
+      "krw": 2800000,
+      "chipId": "m3-ultra-28c-60g"
+    },
+    {
+      "kind": "storage",
+      "fromValue": 1024,
+      "toValue": 2048,
+      "krw": 600000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 1024,
+      "toValue": 4096,
+      "krw": 1500000
+    },
+    {
+      "kind": "storage",
+      "fromValue": 1024,
+      "toValue": 8192,
+      "krw": 3000000
+    }
+  ],
+  "sourceUrl": "https://support.apple.com/kr-kr/122210",
+  "checkedAt": "2026-08-29",
+  "verified": true,
+  "verifiedSource": "press"
+}

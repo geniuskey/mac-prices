@@ -5,15 +5,48 @@ import { FAMILIES, FAMILY_LABEL, TIERS, TIER_LABEL } from '@/lib/schema'
 import type { Family, Tier } from '@/lib/types'
 import type { FilterState } from '@/lib/filters'
 import { isFiltered } from '@/lib/filters'
-import { FieldLabel, Select, Toggle } from './ui'
+import { FieldLabel, RangeSlider, Toggle } from './ui'
 
 function toggleIn<T>(list: T[], value: T): T[] {
   return list.includes(value) ? list.filter((v) => v !== value) : [...list, value]
 }
 
-const MEMORY_OPTIONS = [8, 16, 18, 24, 32, 36, 48, 64, 96, 128]
-const STORAGE_OPTIONS = [256, 512, 1024, 2048, 4096, 8192]
-const PRICE_CAPS = [1000000, 2000000, 3000000, 4000000, 6000000]
+export interface FilterRange {
+  min: number
+  max: number
+  values?: number[]
+}
+
+export interface FilterRanges {
+  memory: FilterRange
+  storage: FilterRange
+  price: FilterRange
+}
+
+function selectedRange(
+  bounds: FilterRange,
+  minValue: number | null,
+  maxValue: number | null,
+) {
+  let lower = Math.max(
+    bounds.min,
+    Math.min(minValue ?? bounds.min, bounds.max),
+  )
+  let upper = Math.max(
+    lower,
+    Math.min(maxValue ?? bounds.max, bounds.max),
+  )
+
+  if (bounds.values && bounds.values.length > 0) {
+    lower = bounds.values.find((value) => value >= lower) ?? bounds.values.at(-1)!
+    upper =
+      [...bounds.values].reverse().find((value) => value <= upper) ??
+      bounds.values[0]
+    upper = Math.max(lower, upper)
+  }
+
+  return { lower, upper }
+}
 
 export default function FilterBar({
   filters,
@@ -22,6 +55,7 @@ export default function FilterBar({
   sizes,
   resultCount,
   totalCount,
+  ranges,
 }: {
   filters: FilterState
   onChange: (next: FilterState) => void
@@ -29,30 +63,41 @@ export default function FilterBar({
   sizes: number[]
   resultCount: number
   totalCount: number
+  ranges: FilterRanges
 }) {
   const [open, setOpen] = useState(false)
   const set = (patch: Partial<FilterState>) => onChange({ ...filters, ...patch })
 
+  const memory = selectedRange(
+    ranges.memory,
+    filters.minMemoryGb,
+    filters.maxMemoryGb,
+  )
+  const storage = selectedRange(
+    ranges.storage,
+    filters.minStorageGb,
+    filters.maxStorageGb,
+  )
+  const price = selectedRange(ranges.price, filters.minKrw, filters.maxKrw)
+
   const storageLabel = (gb: number) =>
     gb >= 1024 ? `${gb / 1024}TB` : `${gb}GB`
+  const priceLabel = (krw: number) => `${(krw / 10000).toLocaleString('ko-KR')}만원`
 
   return (
     <div
-      className="border-b"
+      className="border-b lg:rounded-xl lg:border lg:shadow-sm"
       style={{ background: 'var(--surface)', borderColor: 'var(--border)' }}
     >
-      <div className="mx-auto max-w-[1400px] px-3 py-2.5 sm:px-5">
-        {/* 1행: 검색 + 판매 상태 + 결과 수 */}
+      <div className="mx-auto max-w-[1400px] px-3 py-3 sm:px-5 lg:px-3">
         <div className="flex flex-wrap items-center gap-2">
           <input
             type="search"
             value={filters.q}
             onChange={(e) => set({ q: e.target.value })}
-            placeholder="모델·칩 검색 (예: air m4, studio ultra)"
+            placeholder="모델·칩 검색"
             aria-label="모델 검색"
-            /* 모바일에서는 한 줄을 통째로 쓴다. flex-1 만으로는 옆의 상태
-               토글에 밀려 입력창이 몇 글자 폭으로 찌그러진다. */
-            className="w-full min-w-0 rounded-md border px-2.5 py-1.5 text-[13px] outline-none sm:w-auto sm:flex-1 sm:max-w-xs"
+            className="w-full min-w-0 rounded-md border px-2.5 py-1.5 text-[13px] outline-none sm:flex-1 lg:flex-none"
             style={{
               borderColor: 'var(--border)',
               background: 'var(--surface)',
@@ -95,7 +140,9 @@ export default function FilterBar({
                     tiers: [],
                     sizes: [],
                     minMemoryGb: null,
+                    maxMemoryGb: null,
                     minStorageGb: null,
+                    maxStorageGb: null,
                     minKrw: null,
                     maxKrw: null,
                     status: 'all',
@@ -120,110 +167,145 @@ export default function FilterBar({
         </div>
 
         <div className={`${open ? 'block' : 'hidden'} sm:block`}>
-          {/* 2행: 제품군 */}
-          <div className="mt-2 flex flex-wrap items-center gap-1.5">
-            <FieldLabel>제품군</FieldLabel>
-            {FAMILIES.map((f) => (
-              <Toggle
-                key={f}
-                active={filters.families.includes(f)}
-                onClick={() => set({ families: toggleIn(filters.families, f) })}
-              >
-                {FAMILY_LABEL[f as Family]}
-              </Toggle>
-            ))}
-          </div>
+          <div className="mt-4 space-y-3">
+            <div>
+              <FieldLabel>제품군</FieldLabel>
+              <div className="mt-1.5 flex flex-wrap gap-1.5">
+                {FAMILIES.map((f) => (
+                  <Toggle
+                    key={f}
+                    active={filters.families.includes(f)}
+                    onClick={() => set({ families: toggleIn(filters.families, f) })}
+                  >
+                    {FAMILY_LABEL[f as Family]}
+                  </Toggle>
+                ))}
+              </div>
+            </div>
 
-          {/* 3행: 칩 */}
-          <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
-            <FieldLabel>칩</FieldLabel>
-            {generations.map((g) => (
-              <Toggle
-                key={g}
-                active={filters.generations.includes(g)}
-                onClick={() =>
-                  set({ generations: toggleIn(filters.generations, g) })
-                }
-              >
-                M{g}
-              </Toggle>
-            ))}
-            <span
-              className="mx-1 h-4 w-px"
-              style={{ background: 'var(--border)' }}
-            />
-            {TIERS.map((t) => (
-              <Toggle
-                key={t}
-                active={filters.tiers.includes(t)}
-                onClick={() => set({ tiers: toggleIn(filters.tiers, t as Tier) })}
-              >
-                {TIER_LABEL[t as Tier]}
-              </Toggle>
-            ))}
-          </div>
+            <div>
+              <FieldLabel>칩</FieldLabel>
+              <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
+                {generations.map((g) => (
+                  <Toggle
+                    key={g}
+                    active={filters.generations.includes(g)}
+                    onClick={() =>
+                      set({ generations: toggleIn(filters.generations, g) })
+                    }
+                  >
+                    M{g}
+                  </Toggle>
+                ))}
+                <span
+                  className="mx-1 h-4 w-px"
+                  style={{ background: 'var(--border)' }}
+                />
+                {TIERS.map((t) => (
+                  <Toggle
+                    key={t}
+                    active={filters.tiers.includes(t)}
+                    onClick={() => set({ tiers: toggleIn(filters.tiers, t as Tier) })}
+                  >
+                    {TIER_LABEL[t as Tier]}
+                  </Toggle>
+                ))}
+              </div>
+            </div>
 
-          {/* 4행: 화면 + 최소 사양 + 가격 */}
-          <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1.5">
-            <div className="flex flex-wrap items-center gap-1.5">
+            <div>
               <FieldLabel>화면</FieldLabel>
-              {sizes.map((s) => (
-                <Toggle
-                  key={s}
-                  active={filters.sizes.includes(s)}
-                  onClick={() => set({ sizes: toggleIn(filters.sizes, s) })}
-                >
-                  {s}&quot;
-                </Toggle>
-              ))}
+              <div className="mt-1.5 flex flex-wrap gap-1.5">
+                {sizes.map((s) => (
+                  <Toggle
+                    key={s}
+                    active={filters.sizes.includes(s)}
+                    onClick={() => set({ sizes: toggleIn(filters.sizes, s) })}
+                  >
+                    {s}&quot;
+                  </Toggle>
+                ))}
+              </div>
             </div>
 
-            <div className="flex items-center gap-1.5">
-              <FieldLabel>최소 메모리</FieldLabel>
-              <Select
-                ariaLabel="최소 메모리"
-                value={String(filters.minMemoryGb ?? '')}
-                onChange={(v) => set({ minMemoryGb: v ? Number(v) : null })}
-                options={[
-                  { value: '', label: '제한 없음' },
-                  ...MEMORY_OPTIONS.map((m) => ({
-                    value: String(m),
-                    label: `${m}GB+`,
-                  })),
-                ]}
-              />
-            </div>
+            <div className="space-y-3 border-t pt-3" style={{ borderColor: 'var(--border)' }}>
+              <div>
+                <div className="mb-1 flex items-center justify-between gap-2">
+                  <FieldLabel>메모리</FieldLabel>
+                  <span className="tnum text-[11px]" style={{ color: 'var(--muted)' }}>
+                    {memory.lower === ranges.memory.min ? '최저' : `${memory.lower}GB`} –{' '}
+                    {memory.upper === ranges.memory.max ? '최고' : `${memory.upper}GB`}
+                  </span>
+                </div>
+                <RangeSlider
+                  min={ranges.memory.min}
+                  max={ranges.memory.max}
+                  values={ranges.memory.values}
+                  lower={memory.lower}
+                  upper={memory.upper}
+                  formatValue={(value) => `${value}GB`}
+                  ariaLabel="메모리"
+                  onChange={(lower, upper) =>
+                    set({
+                      minMemoryGb: lower === ranges.memory.min ? null : lower,
+                      maxMemoryGb: upper === ranges.memory.max ? null : upper,
+                    })
+                  }
+                />
+              </div>
 
-            <div className="flex items-center gap-1.5">
-              <FieldLabel>최소 저장</FieldLabel>
-              <Select
-                ariaLabel="최소 저장장치"
-                value={String(filters.minStorageGb ?? '')}
-                onChange={(v) => set({ minStorageGb: v ? Number(v) : null })}
-                options={[
-                  { value: '', label: '제한 없음' },
-                  ...STORAGE_OPTIONS.map((s) => ({
-                    value: String(s),
-                    label: `${storageLabel(s)}+`,
-                  })),
-                ]}
-              />
-            </div>
+              <div>
+                <div className="mb-1 flex items-center justify-between gap-2">
+                  <FieldLabel>저장장치</FieldLabel>
+                  <span className="tnum text-[11px]" style={{ color: 'var(--muted)' }}>
+                    {storage.lower === ranges.storage.min
+                      ? '최저'
+                      : storageLabel(storage.lower)}{' '}
+                    – {storage.upper === ranges.storage.max ? '최고' : storageLabel(storage.upper)}
+                  </span>
+                </div>
+                <RangeSlider
+                  min={ranges.storage.min}
+                  max={ranges.storage.max}
+                  values={ranges.storage.values}
+                  lower={storage.lower}
+                  upper={storage.upper}
+                  step={256}
+                  formatValue={storageLabel}
+                  ariaLabel="저장장치"
+                  onChange={(lower, upper) =>
+                    set({
+                      minStorageGb: lower === ranges.storage.min ? null : lower,
+                      maxStorageGb: upper === ranges.storage.max ? null : upper,
+                    })
+                  }
+                />
+              </div>
 
-            <div className="flex items-center gap-1.5">
-              <FieldLabel>가격 상한</FieldLabel>
-              <Select
-                ariaLabel="가격 상한"
-                value={String(filters.maxKrw ?? '')}
-                onChange={(v) => set({ maxKrw: v ? Number(v) : null })}
-                options={[
-                  { value: '', label: '제한 없음' },
-                  ...PRICE_CAPS.map((c) => ({
-                    value: String(c),
-                    label: `${c / 10000}만원 이하`,
-                  })),
-                ]}
-              />
+              <div>
+                <div className="mb-1 flex items-center justify-between gap-2">
+                  <FieldLabel>가격</FieldLabel>
+                  <span className="tnum text-[11px]" style={{ color: 'var(--muted)' }}>
+                    {price.lower === ranges.price.min ? '최저' : priceLabel(price.lower)} –{' '}
+                    {price.upper === ranges.price.max ? '최고' : priceLabel(price.upper)}
+                  </span>
+                </div>
+                <RangeSlider
+                  min={ranges.price.min}
+                  max={ranges.price.max}
+                  lower={price.lower}
+                  upper={price.upper}
+                  step={10000}
+                  formatValue={priceLabel}
+                  ariaLabel="가격"
+                  onChange={(lower, upper) =>
+                    set({
+                      minKrw: lower === ranges.price.min ? null : lower,
+                      maxKrw: upper === ranges.price.max ? null : upper,
+                    })
+                  }
+                />
+              </div>
             </div>
           </div>
         </div>

@@ -94,6 +94,18 @@ describe('filterRows', () => {
     expect(filterRows(rows, { ...EMPTY_FILTERS, minKrw: 1500000 }).map((r) => r.id).sort()).toEqual(['a', 'd'])
     expect(filterRows(rows, { ...EMPTY_FILTERS, status: 'discontinued' }).map((r) => r.id)).toEqual(['c'])
   })
+
+  it('메모리·저장장치의 최소·최대 범위를 함께 적용한다', () => {
+    const expanded = [...rows, row({ id: 'e', memoryGb: 24, storageGb: 512 })]
+    const filtered = filterRows(expanded, {
+      ...EMPTY_FILTERS,
+      minMemoryGb: 16,
+      maxMemoryGb: 16,
+      minStorageGb: 256,
+      maxStorageGb: 512,
+    })
+    expect(filtered.map((r) => r.id).sort()).toEqual(['a', 'b', 'c', 'd'])
+  })
 })
 
 describe('sortRows', () => {
@@ -119,6 +131,8 @@ describe('URL 직렬화', () => {
       families: ['macbook-pro' as const],
       generations: [3, 4],
       tiers: ['max' as const],
+      maxMemoryGb: 64,
+      maxStorageGb: 2048,
       maxKrw: 5000000,
       status: 'current' as const,
     }

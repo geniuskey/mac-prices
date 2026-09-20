@@ -1,0 +1,47 @@
+{
+  "id": "mac-studio-m5-ultra-2026",
+  "family": "mac-studio",
+  "displayName": "Mac Studio (M5 Ultra, 2026)",
+  "releasedAt": "2026-09-22",
+  "discontinuedAt": null,
+  "display": null,
+  "ports": {
+    "thunderbolt": 6,
+    "thunderboltVersion": 5,
+    "usbA": 2,
+    "hdmi": 1,
+    "sdCard": true,
+    "ethernet": true,
+    "headphone": true
+  },
+  "weightKg": 2.74,
+  "configs": [
+    {
+      "chipId": "m5-ultra-30c-64g",
+      "memoryGb": 96,
+      "storageGb": 1024,
+      "isBaseConfig": true,
+      "prices": [
+        {
+          "krw": 9490000,
+          "effectiveFrom": "2026-09-22"
+        }
+      ]
+    }
+  ],
+  "upgrades": [
+    {
+      "kind": "memory",
+      "fromValue": 96,
+      "toValue": 256,
+      "krw": 6800000,
+      "chipId": "m5-ultra-30c-64g"
+    }
+  ],
+  "sourceUrl": "https://www.apple.com/newsroom/2026/08/apple-introduces-new-mac-studio-with-m5-max-and-m5-ultra/",
+  "checkedAt": "2026-08-29",
+  "verified": true,
+  "verifiedSource": "press",
+  "upgradesVerified": false,
+  "notes": "M5 Ultra 의 512GB 메모리 옵션은 10월 말 제공 예정."
+}

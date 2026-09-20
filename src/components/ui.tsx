@@ -75,6 +75,100 @@ export function Select({
   )
 }
 
+export function RangeSlider({
+  min,
+  max,
+  values,
+  lower,
+  upper,
+  step = 1,
+  formatValue,
+  ariaLabel,
+  onChange,
+}: {
+  min: number
+  max: number
+  values?: number[]
+  lower: number
+  upper: number
+  step?: number
+  formatValue: (value: number) => string
+  ariaLabel: string
+  onChange: (lower: number, upper: number) => void
+}) {
+  const discreteValues = values && values.length > 1 ? values : null
+  const discrete = discreteValues !== null
+  const sliderMin = discrete ? 0 : min
+  const sliderMax = discrete ? discreteValues.length - 1 : max
+  const lowerPosition = discrete ? discreteValues.indexOf(lower) : lower
+  const upperPosition = discrete ? discreteValues.indexOf(upper) : upper
+  const span = sliderMax - sliderMin || 1
+  const lowerPercent = ((lowerPosition - sliderMin) / span) * 100
+  const upperPercent = ((upperPosition - sliderMin) / span) * 100
+
+  return (
+    <div className="min-w-0 flex-1">
+      <div className="flex items-center justify-between gap-2 text-[12px]">
+        <span className="tnum font-medium">{formatValue(lower)}</span>
+        <span style={{ color: 'var(--muted)' }}>–</span>
+        <span className="tnum text-right font-medium">{formatValue(upper)}</span>
+      </div>
+      <div className="relative mt-1 h-5">
+        <div
+          className="absolute top-1/2 right-0 left-0 h-1 -translate-y-1/2 rounded-full"
+          style={{ background: 'var(--border)' }}
+          aria-hidden
+        />
+        <div
+          className="absolute top-1/2 h-1 -translate-y-1/2 rounded-full"
+          style={{
+            left: `${lowerPercent}%`,
+            right: `${100 - upperPercent}%`,
+            background: 'var(--accent)',
+          }}
+          aria-hidden
+        />
+        <input
+          className="range-slider-input z-20"
+          type="range"
+          min={sliderMin}
+          max={sliderMax}
+          step={discrete ? 1 : step}
+          value={lowerPosition}
+          onChange={(event) =>
+            onChange(
+              discrete
+                ? discreteValues[Number(event.target.value)]
+                : Math.min(Number(event.target.value), upper),
+              upper,
+            )
+          }
+          aria-label={`${ariaLabel} 최소`}
+          aria-valuetext={formatValue(lower)}
+        />
+        <input
+          className="range-slider-input z-30"
+          type="range"
+          min={sliderMin}
+          max={sliderMax}
+          step={discrete ? 1 : step}
+          value={upperPosition}
+          onChange={(event) =>
+            onChange(
+              lower,
+              discrete
+                ? discreteValues[Number(event.target.value)]
+                : Math.max(Number(event.target.value), lower),
+            )
+          }
+          aria-label={`${ariaLabel} 최대`}
+          aria-valuetext={formatValue(upper)}
+        />
+      </div>
+    </div>
+  )
+}
+
 export function Badge({
   children,
   tone = 'neutral',

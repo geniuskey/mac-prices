@@ -15,6 +15,65 @@ function Spec({ label, value }: { label: string; value: string | null }) {
   )
 }
 
+function BenchmarkPanel({ row }: { row: Row }) {
+  const benchmarks = row.benchmarks ?? []
+  if (benchmarks.length === 0) return null
+
+  return (
+    <div
+      className="mt-4 rounded-lg border p-3"
+      style={{ borderColor: 'var(--border)', background: 'var(--surface-2)' }}
+    >
+      <div className="mb-2 text-[13px] font-semibold">벤치마크 참고</div>
+      <div className="space-y-2">
+        {benchmarks.map((benchmark) => (
+          <div key={benchmark.id}>
+            <div className="text-[12px] font-medium">
+              {benchmark.suite}
+              {benchmark.version ? ` ${benchmark.version}` : ''}
+              {benchmark.memoryGb ? ` · ${benchmark.memoryGb}GB 실측` : ''}
+            </div>
+            <div className="mt-0.5 grid grid-cols-3 gap-2 text-[12px]">
+              <span>
+                CPU 싱글{' '}
+                <b className="tnum">{benchmark.singleCore?.toLocaleString('ko-KR') ?? '—'}</b>
+              </span>
+              <span>
+                CPU 멀티{' '}
+                <b className="tnum">{benchmark.multiCore?.toLocaleString('ko-KR') ?? '—'}</b>
+              </span>
+              <span>
+                Metal{' '}
+                <b className="tnum">{benchmark.gpuMetal?.toLocaleString('ko-KR') ?? '—'}</b>
+              </span>
+            </div>
+            <div className="mt-0.5 text-[11px]" style={{ color: 'var(--muted)' }}>
+              {benchmark.device} · 측정 {benchmark.measuredAt}{' '}
+              <a
+                href={benchmark.sourceUrl}
+                target="_blank"
+                rel="noreferrer noopener"
+                className="underline underline-offset-2"
+                style={{ color: 'var(--accent)' }}
+              >
+                원본 ↗
+              </a>
+            </div>
+            {benchmark.note && (
+              <div className="mt-0.5 text-[11px]" style={{ color: 'var(--muted)' }}>
+                {benchmark.note}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+      <div className="mt-2 text-[11px]" style={{ color: 'var(--warn)' }}>
+        외부 제출 결과이며 Mac Studio 자체의 실측값과는 다를 수 있습니다.
+      </div>
+    </div>
+  )
+}
+
 /**
  * 확장된 행 안의 BTO 계산기.
  * 이 모델의 업그레이드 표만 써서 실제 구성 가능한 조합만 노출한다.
@@ -179,6 +238,7 @@ export default function RowDetail({ row, model }: { row: Row; model: Model }) {
           <Spec label="무게" value={row.weightKg ? `${row.weightKg}kg` : null} />
           <Spec label="포트" value={portText} />
         </div>
+        <BenchmarkPanel row={row} />
       </div>
 
       <div>

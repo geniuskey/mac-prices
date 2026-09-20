@@ -146,6 +146,49 @@ export const modelSchema = z.object({
    * 올린 것처럼 따로 움직인다.
    */
   upgradesVerified: z.boolean().default(false),
+  /** 가격 구성을 확인한 판매 페이지 */
+  priceSourceUrl: z.string().url().optional(),
   notes: z.string().optional(),
 })
 export type ModelInput = z.infer<typeof modelSchema>
+
+/** 제품 또는 칩 사양에 연결된 외부 벤치마크 참고값. */
+export const benchmarkSchema = z
+  .object({
+    id: z.string().min(1),
+    chipId: z.string().min(1).optional(),
+    modelId: z.string().min(1).optional(),
+    /** 측정 장비의 메모리·저장장치. 점수의 맥락을 보여주는 선택값이다. */
+    memoryGb: z.number().int().positive().optional(),
+    storageGb: z.number().int().positive().optional(),
+    suite: z.string().min(1),
+    version: z.string().min(1).optional(),
+    singleCore: z.number().int().positive().optional(),
+    multiCore: z.number().int().positive().optional(),
+    gpuMetal: z.number().int().positive().optional(),
+    measuredAt: isoDate,
+    sourceUrl: z.string().url(),
+    device: z.string().min(1),
+    note: z.string().optional(),
+  })
+  .superRefine((value, ctx) => {
+    if (!value.chipId && !value.modelId) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'chipId 또는 modelId 중 하나는 있어야 합니다',
+        path: ['chipId'],
+      })
+    }
+    if (
+      value.singleCore === undefined &&
+      value.multiCore === undefined &&
+      value.gpuMetal === undefined
+    ) {
+      ctx.addIssue({
+        code: 'custom',
+        message: '벤치마크 점수가 하나 이상 있어야 합니다',
+        path: ['suite'],
+      })
+    }
+  })
+export type Benchmark = z.infer<typeof benchmarkSchema>

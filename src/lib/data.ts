@@ -1,8 +1,8 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { z } from 'zod'
-import { chipSchema, modelSchema } from './schema'
-import type { Chip, Dataset, Model } from './types'
+import { benchmarkSchema, chipSchema, modelSchema } from './schema'
+import type { Benchmark, Chip, Dataset, Model } from './types'
 import { buildRows } from './price'
 
 const DATA_DIR = path.join(process.cwd(), 'data')
@@ -28,6 +28,7 @@ function listModelFiles(): string[] {
 export interface LoadResult {
   chips: Chip[]
   models: Model[]
+  benchmarks: Benchmark[]
   errors: string[]
 }
 
@@ -36,6 +37,7 @@ export function loadRaw(): LoadResult {
   const errors: string[] = []
 
   let chips: Chip[] = []
+  let benchmarks: Benchmark[] = []
   const chipFile = path.join(DATA_DIR, 'chips.json')
   if (!fs.existsSync(chipFile)) {
     errors.push('data/chips.json 이 없습니다')
@@ -45,6 +47,16 @@ export function loadRaw(): LoadResult {
       errors.push(`chips.json: ${z.prettifyError(parsed.error)}`)
     } else {
       chips = parsed.data
+    }
+  }
+
+  const benchmarkFile = path.join(DATA_DIR, 'benchmarks.json')
+  if (fs.existsSync(benchmarkFile)) {
+    const parsed = z.array(benchmarkSchema).safeParse(readJson(benchmarkFile))
+    if (!parsed.success) {
+      errors.push(`benchmarks.json: ${z.prettifyError(parsed.error)}`)
+    } else {
+      benchmarks = parsed.data
     }
   }
 
@@ -84,12 +96,14 @@ export function loadRaw(): LoadResult {
     }
 
     const chipById = new Map(chips.map((c) => [c.id, c]))
+    const modelTiers = new Set<string>()
     for (const [i, config] of model.configs.entries()) {
       const where = `${rel} configs[${i}]`
       if (!chipIds.has(config.chipId)) {
         errors.push(`${where}: 알 수 없는 chipId "${config.chipId}"`)
       } else {
         const chip = chipById.get(config.chipId)!
+        modelTiers.add(chip.tier)
         if (config.memoryGb > chip.maxMemoryGb) {
           errors.push(
             `${where}: ${config.memoryGb}GB 는 ${chip.family} 상한(${chip.maxMemoryGb}GB) 초과`,
@@ -104,6 +118,16 @@ export function loadRaw(): LoadResult {
           break
         }
       }
+    }
+
+    // Mac Studio 는 Max와 Ultra의 기본 가격대와 메모리 구성이 크게 달라서
+    // 한 모델 파일에 섞으면 동일 조건 비교의 기준 구성이 한쪽에 종속된다.
+    if (model.family === 'mac-studio' && modelTiers.size > 1) {
+      errors.push(
+        `${rel}: Mac Studio 모델은 CPU 등급별로 분리해야 합니다 (현재 ${[
+          ...modelTiers,
+        ].join(', ')})`,
+      )
     }
 
     // variantLabel 까지 넣어야 Mac Pro 타워/랙처럼 구성이 같고 가격만 다른
@@ -131,16 +155,32 @@ export function loadRaw(): LoadResult {
     models.push(model)
   }
 
+  const modelIdSet = new Set(models.map((model) => model.id))
+  const benchmarkIds = new Set<string>()
+  for (const [i, benchmark] of benchmarks.entries()) {
+    const where = `benchmarks.json[${i}]`
+    if (benchmarkIds.has(benchmark.id)) {
+      errors.push(`${where}: 중복 id "${benchmark.id}"`)
+    }
+    benchmarkIds.add(benchmark.id)
+    if (benchmark.chipId && !chipIds.has(benchmark.chipId)) {
+      errors.push(`${where}: 알 수 없는 chipId "${benchmark.chipId}"`)
+    }
+    if (benchmark.modelId && !modelIdSet.has(benchmark.modelId)) {
+      errors.push(`${where}: 알 수 없는 modelId "${benchmark.modelId}"`)
+    }
+  }
+
   if (models.length === 0 && errors.length === 0) {
     errors.push('data/models/ 아래에 모델 파일이 없습니다')
   }
 
-  return { chips, models, errors }
+  return { chips, models, benchmarks, errors }
 }
 
 /** 빌드 타임에 페이지가 쓰는 진입점. 데이터가 깨졌으면 빌드를 실패시킨다. */
 export function loadDataset(asOf = new Date().toISOString().slice(0, 10)): Dataset {
-  const { chips, models, errors } = loadRaw()
+  const { chips, models, benchmarks, errors } = loadRaw()
   if (errors.length) {
     throw new Error(
       `데이터 검증 실패 (${errors.length}건):\n` +
@@ -149,11 +189,19 @@ export function loadDataset(asOf = new Date().toISOString().slice(0, 10)): Datas
   }
 
   const rows = buildRows(models, chips, asOf)
+  for (const row of rows) {
+    row.benchmarks = benchmarks.filter(
+      (benchmark) =>
+        (!benchmark.chipId || benchmark.chipId === row.chip.id) &&
+        (!benchmark.modelId || benchmark.modelId === row.modelId),
+    )
+  }
   const checkedDates = models.map((m) => m.checkedAt).sort()
 
   return {
     models,
     chips,
+    benchmarks,
     rows,
     oldestCheckedAt: checkedDates[0] ?? asOf,
     verifiedCount: models.filter((m) => m.verified).length,

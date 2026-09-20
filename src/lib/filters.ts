@@ -7,7 +7,9 @@ export interface FilterState {
   tiers: Tier[]
   sizes: number[]
   minMemoryGb: number | null
+  maxMemoryGb: number | null
   minStorageGb: number | null
+  maxStorageGb: number | null
   minKrw: number | null
   maxKrw: number | null
   status: 'all' | 'current' | 'discontinued'
@@ -20,7 +22,9 @@ export const EMPTY_FILTERS: FilterState = {
   tiers: [],
   sizes: [],
   minMemoryGb: null,
+  maxMemoryGb: null,
   minStorageGb: null,
+  maxStorageGb: null,
   minKrw: null,
   maxKrw: null,
   status: 'all',
@@ -76,7 +80,9 @@ export function filterRows(rows: Row[], f: FilterState): Row[] {
       if (!f.sizes.includes(Math.floor(row.displaySizeInch))) return false
     }
     if (f.minMemoryGb !== null && row.memoryGb < f.minMemoryGb) return false
+    if (f.maxMemoryGb !== null && row.memoryGb > f.maxMemoryGb) return false
     if (f.minStorageGb !== null && row.storageGb < f.minStorageGb) return false
+    if (f.maxStorageGb !== null && row.storageGb > f.maxStorageGb) return false
     if (f.minKrw !== null && row.priceKrw < f.minKrw) return false
     if (f.maxKrw !== null && row.priceKrw > f.maxKrw) return false
     if (f.status === 'current' && !row.isCurrent) return false
@@ -129,7 +135,9 @@ export function isFiltered(f: FilterState): boolean {
     f.tiers.length > 0 ||
     f.sizes.length > 0 ||
     f.minMemoryGb !== null ||
+    f.maxMemoryGb !== null ||
     f.minStorageGb !== null ||
+    f.maxStorageGb !== null ||
     f.minKrw !== null ||
     f.maxKrw !== null ||
     f.status !== 'all'
@@ -150,7 +158,9 @@ export function toQuery(
   if (f.tiers.length) p.set('tier', f.tiers.join(','))
   if (f.sizes.length) p.set('size', f.sizes.join(','))
   if (f.minMemoryGb !== null) p.set('mem', String(f.minMemoryGb))
+  if (f.maxMemoryGb !== null) p.set('memMax', String(f.maxMemoryGb))
   if (f.minStorageGb !== null) p.set('sto', String(f.minStorageGb))
+  if (f.maxStorageGb !== null) p.set('stoMax', String(f.maxStorageGb))
   if (f.minKrw !== null) p.set('min', String(f.minKrw))
   if (f.maxKrw !== null) p.set('max', String(f.maxKrw))
   if (f.status !== 'all') p.set('status', f.status)
@@ -216,7 +226,9 @@ export function fromQuery(
       tiers: strs('tier') as Tier[],
       sizes: nums('size'),
       minMemoryGb: num('mem'),
+      maxMemoryGb: num('memMax'),
       minStorageGb: num('sto'),
+      maxStorageGb: num('stoMax'),
       minKrw: num('min'),
       maxKrw: num('max'),
       status:

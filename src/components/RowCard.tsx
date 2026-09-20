@@ -2,6 +2,7 @@
 
 import type { Model, Row } from '@/lib/types'
 import { formatKrw, formatKrwShort, formatStorage } from '@/lib/price'
+import { summarizeBenchmarks } from '@/lib/benchmarks'
 import { FAMILY_LABEL } from '@/lib/schema'
 import { Badge } from './ui'
 import RowDetail from './RowDetail'
@@ -25,6 +26,7 @@ export default function RowCard({
   normalizeOn: boolean
 }) {
   const infeasible = row.normalized?.feasible === false
+  const benchmark = summarizeBenchmarks(row.benchmarks)
 
   return (
     <div
@@ -59,6 +61,14 @@ export default function RowCard({
             {FAMILY_LABEL[row.family]} · {row.chip.family} · CPU{' '}
             {row.chip.cpuCores} / GPU {row.chip.gpuCores} · {row.releasedAt.slice(0, 7)}
           </div>
+          {(benchmark.singleCore || benchmark.multiCore || benchmark.gpuMetal) && (
+            <div className="mt-1 text-[11px]" style={{ color: 'var(--muted)' }}>
+              Geekbench 6
+              {benchmark.singleCore ? ` 싱글 ${benchmark.singleCore.toLocaleString('ko-KR')}` : ''}
+              {benchmark.multiCore ? ` · 멀티 ${benchmark.multiCore.toLocaleString('ko-KR')}` : ''}
+              {benchmark.gpuMetal ? ` · Metal ${benchmark.gpuMetal.toLocaleString('ko-KR')}` : ''}
+            </div>
+          )}
 
           <div className="mt-1.5 flex flex-wrap items-baseline gap-x-2 gap-y-1">
             <span className="tnum text-[13px] font-medium">

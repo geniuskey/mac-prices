@@ -13,7 +13,7 @@ import {
 } from '@/lib/filters'
 import { useQueryString } from '@/lib/useQueryString'
 import { normalizeRows } from '@/lib/price'
-import FilterBar from './FilterBar'
+import FilterBar, { type FilterRanges } from './FilterBar'
 import PriceTable from './PriceTable'
 import CompareTray from './CompareTray'
 import { FieldLabel, Select, Toggle } from './ui'
@@ -130,6 +130,39 @@ export default function Explorer({
     [allRows],
   )
 
+  const filterRanges = useMemo<FilterRanges>(() => {
+    const bounds = (
+      values: number[],
+      fallback: { min: number; max: number },
+      discrete = false,
+    ) => {
+      if (values.length === 0) return fallback
+      const unique = [...new Set(values)].sort((a, b) => a - b)
+      return {
+        min: unique[0],
+        max: unique[unique.length - 1],
+        ...(discrete ? { values: unique } : {}),
+      }
+    }
+
+    return {
+      memory: bounds(
+        allRows.map((row) => row.memoryGb),
+        { min: 0, max: 1 },
+        true,
+      ),
+      storage: bounds(
+        allRows.map((row) => row.storageGb),
+        { min: 0, max: 1 },
+        true,
+      ),
+      price: bounds(
+        allRows.map((row) => row.priceKrw),
+        { min: 0, max: 1 },
+      ),
+    }
+  }, [allRows])
+
   const selectedRows = useMemo(
     () =>
       selected
@@ -218,7 +251,7 @@ export default function Explorer({
             정가(VAT 포함)를 한 표에서 비교합니다.
           </p>
 
-          <div
+          <details
             className="mt-3 rounded-lg border px-3 py-2 text-[12.5px]"
             style={{
               borderColor: 'var(--warn)',
@@ -226,135 +259,148 @@ export default function Explorer({
               color: 'var(--warn)',
             }}
           >
-            <strong>
-              기본 정가 대조 {verifiedCount}/{modelList.length}
-            </strong>
-            {' — '}
-            대조된 가격은 언론 보도 기준이며 apple.com/kr 직접 확인은 아닙니다.
-            {unverified > 0 && ` 아직 ${unverified}개 모델은 대조 전입니다.`}
-            <br />
-            <strong>현재가가 추정치인 구성 {estimatedCount}/{allRows.length}</strong>
-            {' — '}
-            2026년 6월 25일 Apple 이 맥 전 라인 가격을 올렸는데 보도는 각
-            제품군의 최저가 구성만 다뤘습니다. 파생 구성은 같은 인상 폭을 적용한
-            추정치이며 <b>추정</b> 표시가 붙습니다.
-            <br />
-            <strong>
-              BTO 업그레이드 단가 대조 {upgradesVerifiedCount}/{modelList.length}
-            </strong>
-            {' — '}
-            메모리·저장장치 추가 비용은 <b>추정값</b>입니다. 2026년 6월 Apple 이
-            메모리 업그레이드 가격을 두 배로 올려 세대마다 크게 다릅니다. 동일
-            조건 비교의 업그레이드 금액은 참고용으로만 보세요.
-            <br />
-            구매 전 반드시 Apple 스토어에서 실제 가격을 확인하세요. (데이터
-            기준일 {oldestCheckedAt})
-          </div>
+            <summary className="cursor-pointer select-none font-medium">
+              가격 데이터 안내 · 기본 정가 {verifiedCount}/{modelList.length} · 추정 구성{' '}
+              {estimatedCount}/{allRows.length}
+            </summary>
+            <div className="mt-2 border-t pt-2" style={{ borderColor: 'var(--warn)' }}>
+              <strong>
+                기본 정가 대조 {verifiedCount}/{modelList.length}
+              </strong>
+              {' — '}
+              대조된 가격은 언론 보도 기준이며 apple.com/kr 직접 확인은 아닙니다.
+              {unverified > 0 && ` 아직 ${unverified}개 모델은 대조 전입니다.`}
+              <br />
+              <strong>현재가가 추정치인 구성 {estimatedCount}/{allRows.length}</strong>
+              {' — '}
+              2026년 6월 25일 Apple 이 맥 전 라인 가격을 올렸는데 보도는 각
+              제품군의 최저가 구성만 다뤘습니다. 파생 구성은 같은 인상 폭을 적용한
+              추정치이며 <b>추정</b> 표시가 붙습니다.
+              <br />
+              <strong>
+                BTO 업그레이드 단가 대조 {upgradesVerifiedCount}/{modelList.length}
+              </strong>
+              {' — '}
+              메모리·저장장치 추가 비용은 <b>추정값</b>입니다. 2026년 6월 Apple 이
+              메모리 업그레이드 가격을 두 배로 올려 세대마다 크게 다릅니다. 동일
+              조건 비교의 업그레이드 금액은 참고용으로만 보세요.
+              <br />
+              구매 전 반드시 Apple 스토어에서 실제 가격을 확인하세요. (데이터
+              기준일 {oldestCheckedAt})
+            </div>
+          </details>
         </div>
       </header>
 
-      <div ref={stickyRef} className="sticky top-0 z-30">
-      <FilterBar
-        filters={filters}
-        onChange={setFilters}
-        generations={generations}
-        sizes={sizes}
-        resultCount={visibleRows.length}
-        totalCount={baseRows.length}
-      />
-
-      {/* 이 사이트의 핵심 기능 — Apple 사이트에서 가장 하기 어려운 비교 */}
-      <div
-        className="border-b"
-        style={{ background: 'var(--surface-2)', borderColor: 'var(--border)' }}
-      >
-        <div className="mx-auto flex max-w-[1400px] flex-wrap items-center gap-x-3 gap-y-2 px-3 py-2.5 sm:px-5">
-          <Toggle
-            active={normalize.on}
-            onClick={onToggleNormalize}
-          >
-            {normalize.on ? '✓ 동일 조건 비교' : '동일 조건 비교'}
-          </Toggle>
-
-          {normalize.on ? (
-            <>
-              <div className="flex items-center gap-1.5">
-                <FieldLabel>메모리</FieldLabel>
-                <Select
-                  ariaLabel="동일 조건 메모리"
-                  value={String(normalize.memoryGb)}
-                  onChange={(v) =>
-                    commit({ normalize: { ...normalize, memoryGb: Number(v) } })
-                  }
-                  options={NORM_MEMORY.map((m) => ({
-                    value: String(m),
-                    label: `${m}GB`,
-                  }))}
-                />
-              </div>
-              <div className="flex items-center gap-1.5">
-                <FieldLabel>저장장치</FieldLabel>
-                <Select
-                  ariaLabel="동일 조건 저장장치"
-                  value={String(normalize.storageGb)}
-                  onChange={(v) =>
-                    commit({ normalize: { ...normalize, storageGb: Number(v) } })
-                  }
-                  options={NORM_STORAGE.map((s) => ({
-                    value: String(s),
-                    label: s >= 1024 ? `${s / 1024}TB` : `${s}GB`,
-                  }))}
-                />
-              </div>
-              <span className="text-[12px]" style={{ color: 'var(--muted)' }}>
-                모든 모델을 같은 사양으로 맞췄을 때의 구매가입니다. 기본 구성에
-                BTO 업그레이드 비용을 더해 계산합니다.{' '}
-                <b style={{ color: 'var(--warn)' }}>
-                  업그레이드 단가는 아직 대조되지 않은 추정값입니다.
-                </b>
-              </span>
-            </>
-          ) : (
-            <span className="text-[12px]" style={{ color: 'var(--muted)' }}>
-              켜면 모든 모델을 같은 메모리·저장장치로 맞춘 가격으로 다시
-              계산합니다. 기본 구성 용량이 제각각이라 정가만으로는 비교가 안 되는
-              문제를 없앱니다.
-            </span>
-          )}
-        </div>
-      </div>
-      </div>
-
       <main>
-        <PriceTable
-          rows={visibleRows}
-          models={models}
-          sort={sort}
-          onSort={onSort}
-          onSetSort={setSort}
-          selected={new Set(selected)}
-          onToggleSelect={onToggleSelect}
-          expandedId={expandedId}
-          onExpand={setExpandedId}
-          normalizeOn={normalize.on}
-        />
+        <div className="mx-auto max-w-[1400px] lg:grid lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-5">
+          <aside
+            className="lg:sticky lg:top-3 lg:self-start"
+            aria-label="제품 필터"
+          >
+            <FilterBar
+              filters={filters}
+              onChange={setFilters}
+              generations={generations}
+              sizes={sizes}
+              resultCount={visibleRows.length}
+              totalCount={baseRows.length}
+              ranges={filterRanges}
+            />
+          </aside>
 
-        <div
-          className="mx-auto max-w-[1400px] px-3 py-8 text-[12px] sm:px-5"
-          style={{ color: 'var(--muted)' }}
-        >
-          <p>
-            가격은 Apple 대한민국 온라인 스토어 정가(VAT 포함) 기준이며 실제
-            판매가와 다를 수 있습니다. 교육 할인·통신사 제휴·리셀러 가격은
-            포함하지 않습니다.
-          </p>
-          <p className="mt-1">
-            이 사이트는 Apple 과 제휴 관계가 없습니다. Apple, MacBook, Mac mini,
-            Mac Studio, iMac, Mac Pro 는 Apple Inc. 의 상표입니다.
-          </p>
-          {selected.length >= MAX_COMPARE && (
-            <p className="mt-1">비교는 최대 {MAX_COMPARE}개까지 가능합니다.</p>
-          )}
+          <section className="min-w-0">
+            <div ref={stickyRef} className="sticky top-0 z-30">
+              {/* 이 사이트의 핵심 기능 — Apple 사이트에서 가장 하기 어려운 비교 */}
+              <div
+                className="border-b"
+                style={{ background: 'var(--surface-2)', borderColor: 'var(--border)' }}
+              >
+                <div className="mx-auto flex max-w-[1400px] flex-wrap items-center gap-x-3 gap-y-2 px-3 py-2.5 sm:px-5">
+                  <Toggle active={normalize.on} onClick={onToggleNormalize}>
+                    {normalize.on ? '✓ 동일 조건 비교' : '동일 조건 비교'}
+                  </Toggle>
+
+                  {normalize.on ? (
+                    <>
+                      <div className="flex items-center gap-1.5">
+                        <FieldLabel>메모리</FieldLabel>
+                        <Select
+                          ariaLabel="동일 조건 메모리"
+                          value={String(normalize.memoryGb)}
+                          onChange={(v) =>
+                            commit({ normalize: { ...normalize, memoryGb: Number(v) } })
+                          }
+                          options={NORM_MEMORY.map((m) => ({
+                            value: String(m),
+                            label: `${m}GB`,
+                          }))}
+                        />
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <FieldLabel>저장장치</FieldLabel>
+                        <Select
+                          ariaLabel="동일 조건 저장장치"
+                          value={String(normalize.storageGb)}
+                          onChange={(v) =>
+                            commit({ normalize: { ...normalize, storageGb: Number(v) } })
+                          }
+                          options={NORM_STORAGE.map((s) => ({
+                            value: String(s),
+                            label: s >= 1024 ? `${s / 1024}TB` : `${s}GB`,
+                          }))}
+                        />
+                      </div>
+                      <span className="text-[12px]" style={{ color: 'var(--muted)' }}>
+                        모든 모델을 같은 사양으로 맞췄을 때의 구매가입니다. 기본 구성에
+                        BTO 업그레이드 비용을 더해 계산합니다.{' '}
+                        <b style={{ color: 'var(--warn)' }}>
+                          업그레이드 단가는 아직 대조되지 않은 추정값입니다.
+                        </b>
+                      </span>
+                    </>
+                  ) : (
+                    <span className="text-[12px]" style={{ color: 'var(--muted)' }}>
+                      켜면 모든 모델을 같은 메모리·저장장치로 맞춘 가격으로 다시
+                      계산합니다. 기본 구성 용량이 제각각이라 정가만으로는 비교가 안 되는
+                      문제를 없앱니다.
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <PriceTable
+              rows={visibleRows}
+              models={models}
+              sort={sort}
+              onSort={onSort}
+              onSetSort={setSort}
+              selected={new Set(selected)}
+              onToggleSelect={onToggleSelect}
+              expandedId={expandedId}
+              onExpand={setExpandedId}
+              normalizeOn={normalize.on}
+            />
+
+            <div
+              className="mx-auto max-w-[1400px] px-3 py-8 text-[12px] sm:px-5"
+              style={{ color: 'var(--muted)' }}
+            >
+              <p>
+                가격은 Apple 대한민국 온라인 스토어 정가(VAT 포함) 기준이며 실제
+                판매가와 다를 수 있습니다. 교육 할인·통신사 제휴·리셀러 가격은
+                포함하지 않습니다.
+              </p>
+              <p className="mt-1">
+                이 사이트는 Apple 과 제휴 관계가 없습니다. Apple, MacBook, Mac mini,
+                Mac Studio, iMac, Mac Pro 는 Apple Inc. 의 상표입니다.
+              </p>
+              {selected.length >= MAX_COMPARE && (
+                <p className="mt-1">비교는 최대 {MAX_COMPARE}개까지 가능합니다.</p>
+              )}
+            </div>
+          </section>
         </div>
       </main>
 

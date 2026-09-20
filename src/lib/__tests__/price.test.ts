@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { normalizeModel, priceAt } from '../price'
+import { loadDataset, loadRaw } from '../data'
+import { buildRows, normalizeModel, priceAt } from '../price'
 import type { Chip, Model } from '../types'
 
 const chip: Chip = {
@@ -63,6 +64,67 @@ describe('priceAt', () => {
 
   it('첫 스냅샷보다 이른 날짜면 첫 스냅샷으로 떨어진다', () => {
     expect(priceAt(prices, '2020-01-01').krw).toBe(2690000)
+  })
+})
+
+describe('옵션별 row 확장', () => {
+  it('메모리·저장장치 옵션의 모든 조합을 row로 펼친다', () => {
+    const rows = buildRows([model], [chip], '2026-08-29')
+
+    // 16/24GB × 256/512/1024GB. 명시된 16/512 구성은 그 가격을 보존한다.
+    expect(rows).toHaveLength(6)
+    expect(rows.map((r) => `${r.memoryGb}/${r.storageGb}`).sort()).toEqual([
+      '16/1024',
+      '16/256',
+      '16/512',
+      '24/1024',
+      '24/256',
+      '24/512',
+    ])
+    expect(
+      rows.find((r) => r.memoryGb === 16 && r.storageGb === 512)?.priceKrw,
+    ).toBe(1190000)
+    expect(
+      rows.find((r) => r.memoryGb === 24 && r.storageGb === 1024)?.priceKrw,
+    ).toBe(1740000)
+  })
+
+  it('2025년 Mac Studio는 Max와 Ultra를 합쳐 28개 옵션 row를 만든다', () => {
+    const { chips, models, errors } = loadRaw()
+    expect(errors).toEqual([])
+    const rows = buildRows(models, chips, '2026-09-20').filter(
+      (row) =>
+        row.modelId === 'mac-studio-m4-max-2025' ||
+        row.modelId === 'mac-studio-m3-ultra-2025',
+    )
+
+    expect(rows).toHaveLength(28)
+    expect(new Set(rows.map((row) => row.id)).size).toBe(rows.length)
+  })
+
+  it('Mac Studio M5 Max는 GPU 바인딩과 모든 메모리·저장 조합을 row로 만든다', () => {
+    const dataset = loadDataset('2026-09-20')
+    const rows = dataset.rows.filter((row) => row.modelId === 'mac-studio-m5-max-2026')
+
+    expect(rows).toHaveLength(20)
+    expect(rows.filter((row) => row.chip.id === 'm5-max-18c-32g')).toHaveLength(5)
+    expect(rows.filter((row) => row.chip.id === 'm5-max-18c-40g')).toHaveLength(15)
+    expect(
+      rows.find(
+        (row) =>
+          row.chip.id === 'm5-max-18c-40g' &&
+          row.memoryGb === 128 &&
+          row.storageGb === 8192,
+      )?.priceKrw,
+    ).toBe(15170000)
+
+    const baseBenchmark = rows.find((row) => row.chip.id === 'm5-max-18c-32g')?.benchmarks
+    expect(baseBenchmark?.some((benchmark) => benchmark.gpuMetal === 189086)).toBe(true)
+    expect(
+      rows
+        .find((row) => row.chip.id === 'm5-max-18c-40g')
+        ?.benchmarks?.some((benchmark) => benchmark.multiCore === 30105),
+    ).toBe(true)
   })
 })
 

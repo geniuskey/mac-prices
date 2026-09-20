@@ -1,0 +1,169 @@
+{
+  "id": "mac-studio-m5-max-2026",
+  "family": "mac-studio",
+  "displayName": "Mac Studio (M5 Max, 2026)",
+  "releasedAt": "2026-09-22",
+  "discontinuedAt": null,
+  "display": null,
+  "ports": {
+    "thunderbolt": 6,
+    "thunderboltVersion": 5,
+    "usbA": 2,
+    "hdmi": 1,
+    "sdCard": true,
+    "ethernet": true,
+    "headphone": true
+  },
+  "weightKg": 2.7,
+  "configs": [
+    {
+      "chipId": "m5-max-18c-32g",
+      "memoryGb": 36,
+      "storageGb": 512,
+      "isBaseConfig": true,
+      "variantLabel": "32코어 GPU",
+      "prices": [{ "krw": 4290000, "effectiveFrom": "2026-09-22", "source": "apple-kr" }]
+    },
+    {
+      "chipId": "m5-max-18c-32g",
+      "memoryGb": 36,
+      "storageGb": 1024,
+      "variantLabel": "32코어 GPU",
+      "prices": [{ "krw": 4800000, "effectiveFrom": "2026-09-22", "source": "apple-kr" }]
+    },
+    {
+      "chipId": "m5-max-18c-32g",
+      "memoryGb": 36,
+      "storageGb": 2048,
+      "variantLabel": "32코어 GPU",
+      "prices": [{ "krw": 5650000, "effectiveFrom": "2026-09-22", "source": "apple-kr" }]
+    },
+    {
+      "chipId": "m5-max-18c-32g",
+      "memoryGb": 36,
+      "storageGb": 4096,
+      "variantLabel": "32코어 GPU",
+      "prices": [{ "krw": 7350000, "effectiveFrom": "2026-09-22", "source": "apple-kr" }]
+    },
+    {
+      "chipId": "m5-max-18c-32g",
+      "memoryGb": 36,
+      "storageGb": 8192,
+      "variantLabel": "32코어 GPU",
+      "prices": [{ "krw": 10750000, "effectiveFrom": "2026-09-22", "source": "apple-kr" }]
+    },
+    {
+      "chipId": "m5-max-18c-40g",
+      "memoryGb": 48,
+      "storageGb": 512,
+      "variantLabel": "40코어 GPU",
+      "prices": [{ "krw": 5310000, "effectiveFrom": "2026-09-22", "source": "apple-kr" }]
+    },
+    {
+      "chipId": "m5-max-18c-40g",
+      "memoryGb": 48,
+      "storageGb": 1024,
+      "variantLabel": "40코어 GPU",
+      "prices": [{ "krw": 5820000, "effectiveFrom": "2026-09-22", "source": "apple-kr" }]
+    },
+    {
+      "chipId": "m5-max-18c-40g",
+      "memoryGb": 48,
+      "storageGb": 2048,
+      "variantLabel": "40코어 GPU",
+      "prices": [{ "krw": 6670000, "effectiveFrom": "2026-09-22", "source": "apple-kr" }]
+    },
+    {
+      "chipId": "m5-max-18c-40g",
+      "memoryGb": 48,
+      "storageGb": 4096,
+      "variantLabel": "40코어 GPU",
+      "prices": [{ "krw": 8370000, "effectiveFrom": "2026-09-22", "source": "apple-kr" }]
+    },
+    {
+      "chipId": "m5-max-18c-40g",
+      "memoryGb": 48,
+      "storageGb": 8192,
+      "variantLabel": "40코어 GPU",
+      "prices": [{ "krw": 11770000, "effectiveFrom": "2026-09-22", "source": "apple-kr" }]
+    },
+    {
+      "chipId": "m5-max-18c-40g",
+      "memoryGb": 64,
+      "storageGb": 512,
+      "variantLabel": "40코어 GPU",
+      "prices": [{ "krw": 5990000, "effectiveFrom": "2026-09-22", "source": "apple-kr" }]
+    },
+    {
+      "chipId": "m5-max-18c-40g",
+      "memoryGb": 64,
+      "storageGb": 1024,
+      "variantLabel": "40코어 GPU",
+      "prices": [{ "krw": 6500000, "effectiveFrom": "2026-09-22", "source": "apple-kr" }]
+    },
+    {
+      "chipId": "m5-max-18c-40g",
+      "memoryGb": 64,
+      "storageGb": 2048,
+      "variantLabel": "40코어 GPU",
+      "prices": [{ "krw": 7350000, "effectiveFrom": "2026-09-22", "source": "apple-kr" }]
+    },
+    {
+      "chipId": "m5-max-18c-40g",
+      "memoryGb": 64,
+      "storageGb": 4096,
+      "variantLabel": "40코어 GPU",
+      "prices": [{ "krw": 9050000, "effectiveFrom": "2026-09-22", "source": "apple-kr" }]
+    },
+    {
+      "chipId": "m5-max-18c-40g",
+      "memoryGb": 64,
+      "storageGb": 8192,
+      "variantLabel": "40코어 GPU",
+      "prices": [{ "krw": 12450000, "effectiveFrom": "2026-09-22", "source": "apple-kr" }]
+    },
+    {
+      "chipId": "m5-max-18c-40g",
+      "memoryGb": 128,
+      "storageGb": 512,
+      "variantLabel": "40코어 GPU",
+      "prices": [{ "krw": 8710000, "effectiveFrom": "2026-09-22", "source": "apple-kr" }]
+    },
+    {
+      "chipId": "m5-max-18c-40g",
+      "memoryGb": 128,
+      "storageGb": 1024,
+      "variantLabel": "40코어 GPU",
+      "prices": [{ "krw": 9220000, "effectiveFrom": "2026-09-22", "source": "apple-kr" }]
+    },
+    {
+      "chipId": "m5-max-18c-40g",
+      "memoryGb": 128,
+      "storageGb": 2048,
+      "variantLabel": "40코어 GPU",
+      "prices": [{ "krw": 10070000, "effectiveFrom": "2026-09-22", "source": "apple-kr" }]
+    },
+    {
+      "chipId": "m5-max-18c-40g",
+      "memoryGb": 128,
+      "storageGb": 4096,
+      "variantLabel": "40코어 GPU",
+      "prices": [{ "krw": 11770000, "effectiveFrom": "2026-09-22", "source": "apple-kr" }]
+    },
+    {
+      "chipId": "m5-max-18c-40g",
+      "memoryGb": 128,
+      "storageGb": 8192,
+      "variantLabel": "40코어 GPU",
+      "prices": [{ "krw": 15170000, "effectiveFrom": "2026-09-22", "source": "apple-kr" }]
+    }
+  ],
+  "upgrades": [],
+  "sourceUrl": "https://www.apple.com/kr/mac-studio/specs/",
+  "priceSourceUrl": "https://www.apple.com/kr/shop/buy-mac/mac-studio",
+  "checkedAt": "2026-09-20",
+  "verified": true,
+  "verifiedSource": "apple-kr",
+  "upgradesVerified": true,
+  "notes": "Apple 한국 스토어의 M5 Max 맞춤 구성 가격을 확인했다. 32코어 GPU는 36GB, 40코어 GPU는 48/64/128GB 메모리와 512GB~8TB SSD 조합으로 기록했다."
+}
