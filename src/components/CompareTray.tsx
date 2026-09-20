@@ -116,68 +116,6 @@ const ATTRS: Attr[] = [
   { label: '상태', value: (r) => (r.isCurrent ? '현행 판매' : `단종 ${r.discontinuedAt}`) },
 ]
 
-function ComparisonCard({ row, onRemove }: { row: Row; onRemove: (id: string) => void }) {
-  const summary = summaryOf(row)
-
-  return (
-    <article
-      className="rounded-xl border p-3"
-      style={{ borderColor: 'var(--border)', background: 'var(--surface-2)' }}
-    >
-      <div className="flex items-start justify-between gap-2">
-        <div className="min-w-0">
-          <h4 className="font-semibold leading-5">{row.displayName}</h4>
-          <p className="mt-0.5 text-[12px]" style={{ color: 'var(--muted)' }}>
-            {row.chip.family} · {row.memoryGb}GB / {formatStorage(row.storageGb)}
-            {row.variantLabel ? ` · ${row.variantLabel}` : ''}
-          </p>
-        </div>
-        <button
-          type="button"
-          onClick={() => onRemove(row.id)}
-          aria-label={`${row.displayName} 비교에서 빼기`}
-          className="shrink-0 rounded px-1 text-[13px]"
-          style={{ color: 'var(--muted)' }}
-        >
-          ✕
-        </button>
-      </div>
-
-      <div className="tnum mt-3 text-[21px] font-bold">{formatKrw(row.priceKrw)}</div>
-      <dl className="mt-2 grid grid-cols-2 gap-x-3 gap-y-1.5 text-[12px]">
-        <div>
-          <dt style={{ color: 'var(--muted)' }}>CPU / GPU</dt>
-          <dd className="tnum font-medium">{row.chip.cpuCores} / {row.chip.gpuCores}코어</dd>
-        </div>
-        <div>
-          <dt style={{ color: 'var(--muted)' }}>대역폭</dt>
-          <dd className="tnum font-medium">
-            {row.chip.memoryBandwidthGBps ? `${row.chip.memoryBandwidthGBps}GB/s` : '—'}
-          </dd>
-        </div>
-        <div>
-          <dt style={{ color: 'var(--muted)' }}>Geekbench 싱글</dt>
-          <dd className="tnum font-medium">{scoreText(summary.singleCore ?? null)}</dd>
-        </div>
-        <div>
-          <dt style={{ color: 'var(--muted)' }}>Geekbench 멀티</dt>
-          <dd className="tnum font-medium">{scoreText(summary.multiCore ?? null)}</dd>
-        </div>
-        <div>
-          <dt style={{ color: 'var(--muted)' }}>Metal</dt>
-          <dd className="tnum font-medium">{scoreText(summary.gpuMetal ?? null)}</dd>
-        </div>
-        <div>
-          <dt style={{ color: 'var(--muted)' }}>전력 유휴 / 최대</dt>
-          <dd className="tnum font-medium">
-            {powerText(summary.powerIdleW ?? null)} / {powerText(summary.powerMaxW ?? null)}
-          </dd>
-        </div>
-      </dl>
-    </article>
-  )
-}
-
 export default function CompareTray({
   rows,
   onRemove,
@@ -196,13 +134,34 @@ export default function CompareTray({
     ? ATTRS.filter((a) => new Set(rows.map(a.value)).size > 1)
     : ATTRS
 
-  const best = (attr: Attr): number | null => {
+  const numericRange = (attr: Attr): { min: number; max: number } | null => {
     if (!attr.highlight || !attr.numeric || rows.length < 2) return null
     const vals = rows
       .map(attr.numeric)
       .filter((value): value is number => value !== null)
     if (vals.length < 2 || new Set(vals).size === 1) return null
-    return attr.highlight === 'min' ? Math.min(...vals) : Math.max(...vals)
+    return { min: Math.min(...vals), max: Math.max(...vals) }
+  }
+
+  const numericStyle = (
+    attr: Attr,
+    row: Row,
+    range: { min: number; max: number } | null,
+  ) => {
+    const value = attr.numeric?.(row) ?? null
+    if (value === null || range === null || !attr.highlight) {
+      return { color: 'var(--text)', fontWeight: 400 }
+    }
+
+    const progress =
+      attr.highlight === 'min'
+        ? (range.max - value) / (range.max - range.min)
+        : (value - range.min) / (range.max - range.min)
+    const strength = Math.round(35 + Math.max(0, Math.min(1, progress)) * 65)
+    return {
+      color: `color-mix(in srgb, var(--accent) ${strength}%, var(--muted))`,
+      fontWeight: progress >= 0.999 ? 700 : 500,
+    }
   }
 
   return (
@@ -227,18 +186,11 @@ export default function CompareTray({
               <span className="text-[12px]" style={{ color: 'var(--muted)' }}>
                 {rows.length < 2
                   ? '2개 이상 선택하면 항목별 우열이 강조됩니다'
-                  : '핵심 비교 카드에서 제품별 차이를 먼저 확인할 수 있습니다'}
+                  : '숫자 색상이 진할수록 해당 항목에서 상대적으로 유리합니다'}
               </span>
             </div>
 
-            <h3 className="mb-2 text-[13px] font-semibold">핵심 비교</h3>
-            <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-              {rows.map((row) => (
-                <ComparisonCard key={row.id} row={row} onRemove={onRemove} />
-              ))}
-            </div>
-
-            <h3 className="mb-2 mt-5 text-[13px] font-semibold">세부 사양</h3>
+            <h3 className="mb-2 text-[13px] font-semibold">사양 비교</h3>
             <div className="overflow-x-auto rounded-lg border" style={{ borderColor: 'var(--border)' }}>
               <table className="min-w-[720px] w-full border-collapse text-[13px]">
                 <thead>
@@ -262,7 +214,7 @@ export default function CompareTray({
                 </thead>
                 <tbody>
                   {visible.map((attr) => {
-                    const bestVal = best(attr)
+                    const range = numericRange(attr)
                     return (
                       <tr
                         key={attr.label}
@@ -276,16 +228,11 @@ export default function CompareTray({
                           {attr.label}
                         </td>
                         {rows.map((r) => {
-                          const numeric = attr.numeric?.(r) ?? null
-                          const isBest = bestVal !== null && numeric === bestVal
                           return (
                             <td
                               key={r.id}
                               className="tnum px-2 py-1.5"
-                              style={{
-                                fontWeight: isBest ? 700 : 400,
-                                color: isBest ? 'var(--accent)' : 'var(--text)',
-                              }}
+                              style={numericStyle(attr, r, range)}
                             >
                               {attr.value(r)}
                             </td>
